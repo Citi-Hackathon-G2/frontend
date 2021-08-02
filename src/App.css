@@ -1,5 +1,8 @@
+@import '~antd/dist/antd.css';
+
+
 .App {
-  text-align: center;
+  
 }
 
 .App-logo {
@@ -35,4 +38,36 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.layout {
+    background: white;
+    background-size: auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.container {
+  min-height: 94vh;
+}
+
+.bottom-menu {
+  min-height: 6vh;
+  position: fixd;
+  width: 100vw;
+  background-color: whitesmoke;
+  flex-direction: row;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.nav-item {
+  margin:auto;
+  width: 100%;
+  margin: auto;
+  justify-items: center;
+  text-align: center;
 }
