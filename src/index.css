@@ -11,3 +11,125 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: "Sofia Pro";
+  font-weight: "Black";
+  src: local('Sofia Pro'), url(./fonts/Sofia-Pro-Black.otf) format("opentype");
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  font-weight: "Semibold";
+  src: local('Sofia Pro'), url(./fonts/Sofia-Pro-Semibold.otf) format("opentype");
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  font-weight: "Regular";
+  src: local('Sofia Pro'), url(./fonts/Sofia-Pro-Regular.otf) format("opentype");
+}
+@font-face {
+  font-family: "Sofia Pro";
+  font-weight: "Bold";
+  src: local('Sofia Pro'), url(./fonts/Sofia-Pro-Bold.otf) format("opentype");
+}
+
+
+.header-style {
+  font-family: "Sofia Pro";
+  font-weight: "Semibold";
+  font-size: x-large;
+  color: #000000;
+  margin-left:5%;
+
+}
+
+.mid-header-style {
+  font-family: "Sofia Pro";
+  font-weight: "Bold";
+  justify-content: left;
+  align-items: left;
+  font-size: xx-large;
+  color: #B15983;
+  margin-left:5%;
+}
+.header-title{
+  font-family: "Sofia Pro";
+  font-weight: "Semibold";
+  margin-left:4%;
+  font-size: x-large;
+  color: #000000;
+  margin-top:5%;
+  padding: 10px 10px 10px 10px;
+}
+
+.table-style {
+  font-family: "Sofia Pro";
+  font-weight: "Regular";
+  justify-content: left;
+  align-items: left;
+  font-size: medium;
+  margin-left:4.5%;
+  margin-top:5%;
+
+}
+
+
+
+.bottom-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #edf67d;
+  margin-left: 100;
+
+}
+.flexbox-container {
+  margin-top: 40rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: #edf67d;
+}
+.horizontal-container {
+  display: flex;
+  flex-direction: row;
+}
+
+
+.nav-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 120px 8px 120px;
+  list-style: none;
+  height: 100px;
+}
+
+.nav-text a {
+  text-decoration: none;
+  color: #000000;
+  font-size: 20px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 60px;
+  border-radius: 4px;
+  font-family: "Sofia Pro";
+}
+
+.nav-text a:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.nav-menu-items {
+  width: 100%;
+}
+
+
+
