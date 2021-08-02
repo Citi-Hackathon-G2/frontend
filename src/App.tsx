@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     BrowserRouter as Router,
     Route,
@@ -8,31 +8,31 @@ import {
 import logo from './logo.svg';
 import './App.css';
 import { Menu, Layout, Row, Col, Button } from 'antd';
-import {
-    MailOutlined,
-    AppstoreOutlined,
-    SettingOutlined,
-    SearchOutlined,
-    UserOutlined,
-    WalletOutlined,
-    HomeOutlined,
-} from '@ant-design/icons';
-import { Home, Me, Shop } from './pages';
-import { Footer } from 'antd/lib/layout/layout';
+import { HomeOutlined, ShopOutlined, SmileOutlined } from '@ant-design/icons';
+import { Home, Me, Wallet } from './pages';
 import { PATHS } from './config/routes';
-
-enum TAB {
-    HOME = '',
-    SHOP = 'shop',
-    ME = 'me',
-}
+import { SplashScreenContainer } from './components';
 
 function App() {
-    const [currentPage, setCurrentPage] = useState<TAB>(TAB.HOME);
+    const [currentPage, setCurrentPage] = useState<PATHS>(PATHS.HOME);
     let history = useHistory();
 
-    const handleTabChange = (e: any, tab: TAB) => {
-        history.push(tab);
+    const [showSplash, setShowSplash] = useState(true);
+
+    useEffect(() => {
+        setTimeout(() => setShowSplash(false), 1000);
+    });
+
+    if (showSplash) {
+        return (
+            <SplashScreenContainer
+                children={<ShopOutlined style={{ fontSize: '20vh' }} />}
+            />
+        );
+    }
+
+    const handleTabChange = (e: any, tab: PATHS) => {
+        return history.push(tab);
     };
 
     return (
@@ -41,8 +41,8 @@ function App() {
                 <Route exact path={PATHS.HOME}>
                     <Home />
                 </Route>
-                <Route exact path={PATHS.SHOP}>
-                    <Shop />
+                <Route exact path={PATHS.WALLET}>
+                    <Wallet />
                 </Route>
                 <Route exact path={PATHS.ME}>
                     <Me />
@@ -51,16 +51,18 @@ function App() {
             <div className="bottom-menu">
                 <div className="nav-item">
                     <HomeOutlined
-                        onClick={(e) => handleTabChange(e, TAB.HOME)}
+                        onClick={(e) => handleTabChange(e, PATHS.HOME)}
                     />
                 </div>
                 <div className="nav-item">
                     <HomeOutlined
-                        onClick={(e) => handleTabChange(e, TAB.SHOP)}
+                        onClick={(e) => handleTabChange(e, PATHS.WALLET)}
                     />
                 </div>
                 <div className="nav-item">
-                    <HomeOutlined onClick={(e) => handleTabChange(e, TAB.ME)} />
+                    <SmileOutlined
+                        onClick={(e) => handleTabChange(e, PATHS.ME)}
+                    />
                 </div>
             </div>
         </div>

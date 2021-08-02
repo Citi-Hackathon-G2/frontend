@@ -1,0 +1,22 @@
+.splash-screen-container {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  animation: fadeOut 2.1s linear ;
+  background-color: white;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+}
+
+to {
+    opacity: 0;
+}
+
+  
+}
