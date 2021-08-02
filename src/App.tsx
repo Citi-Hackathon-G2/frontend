@@ -4,19 +4,21 @@ import {
     Route,
     Switch,
     useHistory,
+    Redirect,
 } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
-import { Menu, Layout, Row, Col, Button } from 'antd';
-import { HomeOutlined, ShopOutlined, SmileOutlined } from '@ant-design/icons';
-import { Home, Me, Wallet } from './pages';
+import { ShopOutlined } from '@ant-design/icons';
+import { Home, Me, Register, Wallet } from './pages';
 import { PATHS } from './config/routes';
 import { SplashScreenContainer } from './components';
+import { AuthProvider } from './authentication';
+import { Login } from './pages/login';
+import { Layout } from './components';
+import { Base } from './base';
 
 function App() {
-    const [currentPage, setCurrentPage] = useState<PATHS>(PATHS.HOME);
     let history = useHistory();
-
     const [showSplash, setShowSplash] = useState(true);
 
     useEffect(() => {
@@ -31,41 +33,14 @@ function App() {
         );
     }
 
-    const handleTabChange = (e: any, tab: PATHS) => {
-        return history.push(tab);
-    };
+    // const handleTabChange = (e: any, tab: PATHS) => {
+    //     return history.push(tab);
+    // };
 
     return (
-        <div className="App">
-            <div className="container">
-                <Route exact path={PATHS.HOME}>
-                    <Home />
-                </Route>
-                <Route exact path={PATHS.WALLET}>
-                    <Wallet />
-                </Route>
-                <Route exact path={PATHS.ME}>
-                    <Me />
-                </Route>
-            </div>
-            <div className="bottom-menu">
-                <div className="nav-item">
-                    <HomeOutlined
-                        onClick={(e) => handleTabChange(e, PATHS.HOME)}
-                    />
-                </div>
-                <div className="nav-item">
-                    <HomeOutlined
-                        onClick={(e) => handleTabChange(e, PATHS.WALLET)}
-                    />
-                </div>
-                <div className="nav-item">
-                    <SmileOutlined
-                        onClick={(e) => handleTabChange(e, PATHS.ME)}
-                    />
-                </div>
-            </div>
-        </div>
+        <AuthProvider>
+            <Base />
+        </AuthProvider>
     );
 }
 

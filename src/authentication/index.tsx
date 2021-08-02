@@ -60,6 +60,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
                     await logout();
                 }
             }
+
             setIsAuthenticated(firebaseUser !== null);
             setIsLoading(false);
         })();
@@ -77,7 +78,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
                 logout,
             }}
         >
-            <Spin spinning={isLoading}>{children}</Spin>
+            {children}
         </AuthContext.Provider>
     );
 };
