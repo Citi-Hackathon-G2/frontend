@@ -25,10 +25,9 @@ export const Register: React.FC<{}> = () => {
     const onFinish = async ({ username, email, password }: RegisterRequest) => {
         setLoading(true);
         try {
-            //TODO: register function here
-            await register(email, password);
+            await register({ username, email, password });
             await login(email, password); // login first then create user
-            await createUser(username); // create user in firestore
+            // await createUser(username); // create user in firestore
             history.push(PATHS.HOME);
         } catch (err) {
             console.log(err);

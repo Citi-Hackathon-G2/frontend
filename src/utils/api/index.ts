@@ -1,3 +1,1 @@
-export * from './response';
-export * from './user';
-export * from './firestore';
+export * from './register';

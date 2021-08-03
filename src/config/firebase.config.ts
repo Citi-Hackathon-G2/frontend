@@ -3,7 +3,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-
+import 'firebase/functions';
 const config = {
     apiKey: 'AIzaSyAqIXc5CWcV854MlhnuNrkGeU9LpCdXsyY',
     authDomain: 'quearh-69.firebaseapp.com',
@@ -14,5 +14,13 @@ const config = {
 };
 
 const firebaseApp = firebase.initializeApp(config);
-export const auth = firebaseApp.auth();
-export const db = firebaseApp.firestore();
+const auth = firebaseApp.auth();
+const db = firebaseApp.firestore();
+const firebaseFunctions = firebaseApp.functions();
+
+if (location.hostname === 'localhost') {
+    auth.useEmulator('http://localhost:9099');
+    db.useEmulator('localhost', 5002);
+    firebaseFunctions.useEmulator('localhost', 5001);
+}
+export { auth, db, firebaseFunctions };
