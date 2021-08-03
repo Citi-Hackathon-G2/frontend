@@ -1,90 +1,97 @@
 import React, {
-    createContext,
-    useState,
-    useContext,
-    useEffect,
-    FC,
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  FC,
 } from 'react';
 import { Spin } from 'antd';
 import firebase from 'firebase/app';
-import { login, logout, useFirebaseAuthentication } from '../utils/index';
+import {
+  login,
+  logout,
+  useFirebaseAuthentication,
+  UserModel,
+} from '../utils/index';
+import { useUser } from '../utils/helpers/user';
 
 type AuthProviderProps = {
-    children: React.ReactNode;
+  children: React.ReactNode;
 };
 
 type AuthContextType = {
-    firebaseUser: firebase.User | null;
-    idToken: string;
-    user: {} | null; //TODO: get user type
-    isAuthenticated: boolean;
-    isLoading: boolean;
-    login: typeof login;
-    logout: typeof logout;
+  firebaseUser: firebase.User | null;
+  idToken: string;
+  user: UserModel | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  login: typeof login;
+  logout: typeof logout;
 };
 
 const AuthContext = createContext<AuthContextType>({
-    firebaseUser: null,
-    idToken: '',
-    user: null,
-    isAuthenticated: false,
-    isLoading: true,
-    login,
-    logout,
+  firebaseUser: null,
+  idToken: '',
+  user: null,
+  isAuthenticated: false,
+  isLoading: true,
+  login,
+  logout,
 });
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
-    const firebaseUser: firebase.User | null = useFirebaseAuthentication();
-    const [idToken, setIdToken] = useState<string>('');
-    const [user, setUser] = useState<{} | null>(null); //TODO: get user type
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState(true);
+  const firebaseUser: firebase.User | null = useFirebaseAuthentication();
+  const [idToken, setIdToken] = useState<string>('');
+  const [userUid, setUserUid] = useState<string>('');
+  const user: UserModel | null = useUser(userUid);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        setIsLoading(true);
-        (async () => {
-            if (firebaseUser === null) {
-                setUser(null);
-                setIdToken('');
-            } else {
-                // TODO: may need to setInterval to refresh idToken periodically
-                try {
-                    const [user, idToken] = await Promise.all([
-                        // TODO: get single user api
-                        // getSingleUser({ id: firebaseUser.uid }),
-                        firebaseUser.getIdToken(),
-                    ]);
-                    setUser(user);
-                    setIdToken(idToken);
-                } catch (error) {
-                    await logout();
-                }
-            }
+  useEffect(() => {
+    setIsLoading(true);
+    (async () => {
+      if (firebaseUser === null) {
+        // setUser(null);
+        setIdToken('');
+      } else {
+        // TODO: may need to setInterval to refresh idToken periodically
+        try {
+          const [userUid, idToken] = await Promise.all([
+            firebaseUser.uid,
+            firebaseUser.getIdToken(),
+          ]);
 
-            setIsAuthenticated(firebaseUser !== null);
-            setIsLoading(false);
-        })();
-    }, [firebaseUser]);
+          setUserUid(userUid);
+          setIdToken(idToken);
+        } catch (error) {
+          await logout();
+        }
+      }
 
-    return (
-        <AuthContext.Provider
-            value={{
-                isAuthenticated,
-                firebaseUser,
-                idToken,
-                user,
-                isLoading,
-                login,
-                logout,
-            }}
-        >
-            {children}
-        </AuthContext.Provider>
-    );
+      setIsAuthenticated(firebaseUser !== null);
+      setIsLoading(false);
+    })();
+  }, [firebaseUser]);
+
+  return (
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        firebaseUser,
+        idToken,
+        user,
+        isLoading,
+        login,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = (): AuthContextType => {
-    return useContext<AuthContextType>(AuthContext);
+  return useContext<AuthContextType>(AuthContext);
 };
 /*
 https://medium.com/@tafka_labs/auth-redirect-in-nextjs-3a3a524c0a06

@@ -1,9 +1,15 @@
-type User = {
-    id: string;
-    username: string;
-    email: string;
-    vouchers: any[]; // vouchers which user owns
-    shops: any[]; // shops which user controls
+import firebase from 'firebase';
+import { Shop, Voucher } from './firestore';
+export type User = {
+  username: string; // unique key
+  email: string;
+  vouchers: firebase.firestore.DocumentReference[]; // vouchers which user has bought
+  shops: firebase.firestore.DocumentReference[]; // shops which user controls
 };
 
-export type { User };
+export type UserModel = {
+  username: string; // unique key
+  email: string;
+  vouchers: Voucher[];
+  shops: Shop[];
+};
