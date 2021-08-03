@@ -42,9 +42,7 @@ const AuthRoute = ({
             isAuthenticated === true ? (
                 <Redirect to={PATHS.HOME} />
             ) : (
-                <Layout>
-                    <Component {...props} />
-                </Layout>
+                <Component {...props} />
             )
         }
     />

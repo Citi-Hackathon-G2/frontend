@@ -13,7 +13,7 @@ import { Route, useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../authentication';
 import { PATHS } from '../config/routes';
-import { RegisterRequest } from '../utils';
+import { createUser, register, RegisterRequest } from '../utils';
 import styles from './login.module.css';
 const { Title } = Typography;
 
@@ -22,13 +22,15 @@ export const Register: React.FC<{}> = () => {
     const { login } = useAuth();
     const [loading, setLoading] = useState<boolean>(false);
 
-    const onFinish = async ({ email, password }: RegisterRequest) => {
+    const onFinish = async ({ username, email, password }: RegisterRequest) => {
         setLoading(true);
         try {
-            //TODO: register function here
-            await login(email, password);
+            await register({ username, email, password });
+            await login(email, password); // login first then create user
+            // await createUser(username); // create user in firestore
             history.push(PATHS.HOME);
         } catch (err) {
+            console.log(err);
             notification.error({
                 message: err.message,
             });
@@ -119,7 +121,7 @@ export const Register: React.FC<{}> = () => {
                                 type="primary"
                                 htmlType="submit"
                             >
-                                Login
+                                Register
                             </Button>
                         </Form.Item>
                         <Button type="link" onClick={navToLogin}>

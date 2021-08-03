@@ -3,8 +3,8 @@ type SuccessResponse = {
 };
 
 type ErrorResponse = {
-    success: false;
-    errMsg: string;
+    code: false;
+    message: string;
 };
 
 type APIResponse = SuccessResponse | ErrorResponse;

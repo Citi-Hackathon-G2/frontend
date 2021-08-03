@@ -42,7 +42,6 @@ export const Base: React.FC<{}> = () => {
                 component={Login}
                 path={PATHS.LOGIN}
             />
-
             <AuthRoute
                 isAuthenticated={isAuthenticated}
                 path={PATHS.REGISTER}

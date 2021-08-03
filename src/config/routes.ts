@@ -5,6 +5,7 @@ export enum PATHS {
     HOME = '/',
     WALLET = '/wallet',
     ME = '/me',
-    LOGIN = "/login",
-    REGISTER = "/register"
+    LOGIN = '/login',
+    // LOGOUT = '/logout',
+    REGISTER = '/register',
 }
