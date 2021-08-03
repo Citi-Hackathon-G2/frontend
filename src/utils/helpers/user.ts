@@ -9,7 +9,7 @@ function useUser(id: string) {
   const [vouchers, setVouchers] = useState<Voucher[]>([]);
 
   useEffect(() => {
-    console.log('user fired', id);
+    // console.log('user fired', id);
     if (id === '') {
       setUser(null);
       setShops([]);
