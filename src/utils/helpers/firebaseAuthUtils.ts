@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import firebase from 'firebase/app';
-import auth from '../../config/firebase.config';
+import { auth } from '../../config/firebase.config';
+import { RegisterRequest } from '../api';
 
 async function login(email: string, password: string) {
     return auth.signInWithEmailAndPassword(email, password);
@@ -8,6 +9,10 @@ async function login(email: string, password: string) {
 
 async function logout() {
     return auth.signOut();
+}
+
+async function register(email: string, password: string) {
+    return auth.createUserWithEmailAndPassword(email, password);
 }
 
 async function getCurrentFirebaseUser(): Promise<firebase.User | null> {
@@ -36,4 +41,10 @@ function useFirebaseAuthentication(): firebase.User | null {
     return firebaseUser;
 }
 
-export { login, logout, getCurrentFirebaseUser, useFirebaseAuthentication };
+export {
+    login,
+    logout,
+    getCurrentFirebaseUser,
+    useFirebaseAuthentication,
+    register,
+};
