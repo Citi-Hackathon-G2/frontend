@@ -1,27 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  useHistory,
-  Redirect,
-} from 'react-router-dom';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
 import { ShopOutlined } from '@ant-design/icons';
-import { Home, Me, Register, Wallet } from './pages';
+
+import { Home, Me, Register, Wallet, Cashier } from './pages';
 import scanQR from './cashier/scanQR';
 import { PATHS } from './config/routes';
-import { SplashScreenContainer } from './components';
-import { AuthProvider, useAuth } from './authentication';
+import { useAuth } from './authentication';
 import { Login } from './pages/login';
-import { Layout } from './components/layout';
 import { AuthRoute, GuardedRoute } from './guarded-route';
+import { SplashScreenContainer } from './components';
+
+import './App.css';
 
 export const Base: React.FC<{}> = () => {
-  const { isAuthenticated, isLoading } = useAuth();
-  //   console.log(isAuthenticated);
-  return (
+  const { isLoading, isAuthenticated } = useAuth();
+
+  return isLoading ? (
+    <SplashScreenContainer
+      children={<ShopOutlined style={{ fontSize: '20vh' }} />}
+    />
+  ) : (
     <>
       <GuardedRoute
         isAuthenticated={isAuthenticated}
@@ -37,6 +35,11 @@ export const Base: React.FC<{}> = () => {
         isAuthenticated={isAuthenticated}
         path={PATHS.ME}
         component={Me}
+      ></GuardedRoute>
+      <GuardedRoute
+        isAuthenticated={isAuthenticated}
+        path={PATHS.CASHIER}
+        component={Cashier}
       ></GuardedRoute>
       <GuardedRoute
         isAuthenticated={isAuthenticated}
