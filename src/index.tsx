@@ -5,12 +5,16 @@ import App from './App';
 import { BrowserRouter as Router } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './authentication';
+import {ElementsProvider} from "./components/stripe/ElementsProvider";
+
 ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
-      <Router>
-        <App />
-      </Router>
+      <ElementsProvider>
+        <Router>
+          <App />
+        </Router>
+      </ElementsProvider>
     </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root')

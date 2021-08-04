@@ -3,6 +3,7 @@ import {
   TagOutlined,
   WalletOutlined,
   DollarOutlined,
+  UserSwitchOutlined,
 } from '@ant-design/icons';
 import { Card, Carousel, Statistic, Button } from 'antd';
 import React from 'react';
@@ -12,6 +13,7 @@ import styles from './wallet.module.css';
 
 export const Wallet: React.FC<{}> = () => {
   const { user } = useAuth();
+
   return (
     <div className={styles.container}>
       {/* <div style={{ marginTop: '10%' }}></div> */}
@@ -32,18 +34,26 @@ export const Wallet: React.FC<{}> = () => {
           </div>
           <div className={styles.cornerCounter}>
             <div className="header-style" style={{ color: 'white' }}>
-              5
+              {user?.vouchers.length}
             </div>
           </div>
         </div>
         <div className={styles.scrollContainer}>
-          <Card className={styles.innerCard}>test</Card>
-          <Card className={styles.innerCard}>test</Card>
-          <Card className={styles.innerCard}>test</Card>
-          <Card className={styles.innerCard}>test</Card>
-          <Card className={styles.innerCard}>test</Card>
-          <Card className={styles.innerCard}>test</Card>
-          <Card className={styles.innerCard}>test</Card>
+          {user == null
+            ? null
+            : user.vouchers.map((voucher) => (
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <VoucherCard
+                    style={{
+                      marginTop: '0.5rem',
+                      marginLeft: '0.5rem',
+                      marginRight: '0.5rem',
+                    }}
+                    key={voucher.id}
+                    {...voucher}
+                  />
+                </div>
+              ))}
         </div>
       </Card>
 
@@ -69,7 +79,7 @@ export const Wallet: React.FC<{}> = () => {
           </div>
         </div>
         <div className={styles.balanceContainer}>
-          <Statistic prefix={<DollarOutlined />} value={112893} precision={2} />
+          <Statistic prefix={<DollarOutlined />} value={153.3} precision={2} />
           <Button
             style={{
               marginTop: 16,
