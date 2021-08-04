@@ -1,4 +1,6 @@
 import { firebaseFunctions } from '../../../config/firebase.config';
+//const cors = require('cors')({ origin: true });
+
 
 type CreateShopRequest = {
   name: string | undefined;
@@ -27,5 +29,17 @@ export async function createVoucher(
 ): Promise<boolean> {
   const { data } = await createVoucherCallable(req);
 
+  return !!data.success as boolean;
+}
+
+
+
+
+type RedeemRequest = {
+  voucherId: string;
+}
+const redeemVoucherCallable = firebaseFunctions.httpsCallable('redeemVoucher');
+export async function redeemVoucher(req: RedeemRequest): Promise<boolean> {
+  const { data } = await redeemVoucherCallable(req);
   return !!data.success as boolean;
 }

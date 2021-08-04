@@ -21,8 +21,9 @@ import firebase from 'firebase';
 
 export const Results: React.FC<{}> = () => {
 
-  
 
+  
+  
   const [voucherdata, setvoucherdata] = useState({
     id: "",
     title: "",

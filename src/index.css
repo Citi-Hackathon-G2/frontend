@@ -62,6 +62,26 @@ code {
     color: #b15983;
     margin-left: 5%;
 }
+
+.black-header-style {
+  font-family: 'Sofia Pro';
+  font-weight: 'Bold';
+  justify-content: left;
+  align-items: left;
+  font-size: xx-large;
+  color: #000000;
+  margin-left: 5%;
+}
+.white-header-style {
+  font-family: 'Sofia Pro';
+  font-weight: 'Bold';
+  justify-content: left;
+  align-items: left;
+  font-size: xx-large;
+  color: #ffffff;
+  margin-left: 5%;
+  padding: 10px 10px 10px 10px;
+}
 .header-title {
     font-family: 'Sofia Pro';
     font-weight: 'Semibold';
@@ -71,6 +91,16 @@ code {
     margin-top: 5%;
     padding: 10px 10px 10px 10px;
 }
+
+.text-style {
+  font-family: 'Sofia Pro';
+  font-weight: 'Semibold';
+  margin-left: 5%;
+  font-size: small;
+  color: grey;
+  padding: 0px 0px 0px 0px;
+}
+
 
 
 .table-style {
