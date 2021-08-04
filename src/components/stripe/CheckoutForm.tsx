@@ -2,20 +2,25 @@ import React, {useState} from 'react';
 import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
 
 import {CardSection} from './CardSection';
-import {StripeCardElement, PaymentIntentResult, PaymentMethodResult} from "@stripe/stripe-js";
-
-const BE_DOMAIN = "localhost:8080";
-const BE_PAY_ENDPOINT = BE_DOMAIN + "/pay";
+import {StripeCardElement, PaymentIntentResult} from "@stripe/stripe-js";
+import {firebaseFunctions} from "../../config/firebase.config";
 
 type CheckoutFormProps = {
   children?: React.ReactNode;
   // stripe-related fields
-  voucherID: string;
+  voucherId: string;
   quantity: number;
-  paymentMethodID: string;
 };
 
 // TODO temporary
+type BuyRequest = {
+  voucherId?: string | undefined;
+  quantity?: number | undefined;
+  paymentMethodId?: string | undefined;
+  paymentIntentId?: string | undefined;
+  // currency?: string; // three-letter ISO code https://stripe.com/docs/currencies
+};
+
 type SuccessResponse = {
   success: true;
   requiresAction?: boolean | undefined;
@@ -23,7 +28,6 @@ type SuccessResponse = {
 }
 
 type ErrorResponse = {
-  success: false;
   code: string;
   message: string;
   details?: unknown | undefined;
@@ -31,43 +35,12 @@ type ErrorResponse = {
 
 type APIResponse = SuccessResponse | ErrorResponse;
 
-export const CheckoutForm: React.FC<CheckoutFormProps> = ({ voucherID, quantity }) => {
+export const CheckoutForm: React.FC<CheckoutFormProps> = ({ voucherId, quantity }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [message, setMessage] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
-
-  const handleStripeJsResult = (result: PaymentIntentResult) => {
-    if (result.error) {
-      setMessage("something went wrong.");
-      setIsDisabled(false);
-    } else {
-      // the card action has been fulfilled
-      // confirm the PaymentIntent again on the server
-      fetch(BE_PAY_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ paymentIntentId: result.paymentIntent.id })
-      })
-        .then((confirmResult) => confirmResult.json())
-        .then(handleServerResponse);
-    }
-  }
-
-  const handleServerResponse = (res: APIResponse) => {
-    if (res.success && res.requiresAction && res.paymentIntentClientSecret) {
-      setIsDisabled(true);
-      setMessage("loading...");
-      stripe?.handleCardAction(
-        res.paymentIntentClientSecret
-      ).then(handleStripeJsResult);
-    } else if (!res.success) {
-      setMessage(res.message);
-    } else {
-      setMessage("payment success!");
-      // TODO perform redirection or anything
-    }
-  }
+  const buyVoucher = firebaseFunctions.httpsCallable("buyVoucher");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     // We don't want to let default form submission happen here,
@@ -104,26 +77,68 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ voucherID, quantity 
       setMessage("");
 
       // Otherwise send paymentMethod.id to your server
-      fetch(BE_PAY_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          voucherID: voucherID,
-          quantity: quantity,
-          paymentMethodId: result.paymentMethod.id,
+      console.log(voucherId);
+      const req: BuyRequest = {
+        voucherId: voucherId,
+        quantity: quantity,
+        paymentMethodId: result.paymentMethod.id,
+        paymentIntentId: undefined
+      };
+      buyVoucher(req)
+        .then((res) => {
+          console.log(res);
+          handleServerResponse(res.data);
+      })
+        .catch((err: ErrorResponse) => {
+          console.error(err);
+          setMessage(err.message);
         })
-      }).then((result) => {
-        // Handle server response (see Step 4)
-        result.json().then((json) => handleServerResponse(json));
-      });
     }
   };
 
+  const handleServerResponse = (res: SuccessResponse) => {
+    if (res.success && res.requiresAction && res.paymentIntentClientSecret) {
+      setIsDisabled(true);
+      setMessage("loading...");
+      stripe?.handleCardAction(
+        res.paymentIntentClientSecret
+      ).then(handleStripeJsResult);
+    } else {
+      setMessage("payment success!");
+      // TODO perform redirection or anything
+    }
+  }
+
+  const handleStripeJsResult = (result: PaymentIntentResult) => {
+    if (result.error) {
+      setMessage("something went wrong.");
+      setIsDisabled(false);
+    } else {
+      // the card action has been fulfilled
+      // confirm the PaymentIntent again on the server
+      buyVoucher({
+        voucherId: voucherId,
+        quantity: quantity,
+        paymentIntentId: result.paymentIntent.id
+      })
+        .then((res) => {
+          console.log(res);
+          handleServerResponse(res.data);
+        })
+        .catch((err: ErrorResponse) => {
+          console.error(err);
+          setMessage(err.message);
+        });
+    }
+  }
+
   return (
     <form onSubmit={handleSubmit}>
-      <input type="text" value={voucherID} disabled id="voucherID" name="voucherID" />
+      <input type="text" value={voucherId} disabled id="voucherID" name="voucherID" />
       <input type="text" value={quantity} disabled id="quantity" name="quantity" />
-      <CardSection />
+      <div>
+        <CardSection />
+      </div>
       <button type="submit" disabled={!stripe || isDisabled}>Submit Payment</button>
       <div>{message}</div>
     </form>

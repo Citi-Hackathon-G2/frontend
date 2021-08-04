@@ -5,7 +5,7 @@ import App from './App';
 import { BrowserRouter as Router } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './authentication';
-import {ElementsProvider} from "./stripe/ElementsProvider";
+import {ElementsProvider} from "./components/stripe/ElementsProvider";
 
 ReactDOM.render(
   <React.StrictMode>

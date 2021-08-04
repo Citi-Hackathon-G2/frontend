@@ -3,8 +3,10 @@
  */
 import React from 'react';
 import {CardElement} from '@stripe/react-stripe-js';
-// import './Styles.css'
-const CARD_ELEMENT_OPTIONS = {
+import {StripeCardElementOptions} from "@stripe/stripe-js";
+import './Styles.css';
+
+const CARD_ELEMENT_OPTIONS: StripeCardElementOptions = {
   style: {
     base: {
       color: "#32325d",
@@ -22,6 +24,7 @@ const CARD_ELEMENT_OPTIONS = {
   },
 };
 
+// Sample cards: https://stripe.com/docs/payments/accept-a-payment-synchronously?platform=web#web-test-integration
 export const CardSection: React.FC = () => {
   return (
     <label>
