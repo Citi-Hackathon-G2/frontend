@@ -1,0 +1,54 @@
+.container {
+  height: 91vh;
+  width: 100vw;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.yellowCard {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05), 0 7px 7px rgba(0, 0, 0, 0.12);
+  padding: 0px;
+  transition: 0.3s;
+  border-radius: 10px; /* 5px rounded corners */
+  min-width: 90vw;
+  max-width: 90vw;
+  background-color: #edf67d;
+  height: 25vh;
+}
+
+.cornerCounter {
+  margin-left: auto;
+  margin-top: 0%;
+  background-color: #b15983;
+  padding: 0px 10px 0px 10px;
+  border-radius: 10px;
+}
+
+.scrollContainer {
+  margin-top: 1%;
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.innerCard {
+  padding: 0px;
+  transition: 0.3s;
+  border-radius: 10px; /* 5px rounded corners */
+  height: 13vh;
+  width: 20vw;
+  margin: 10px;
+}
+
+.balanceContainer {
+  height: 15vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: left;
+}

@@ -1,0 +1,24 @@
+.container {
+  height: 100vh;
+  width: 100vw;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+
+}
+
+.yellowCard {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05), 0 7px 7px rgba(0, 0, 0, 0.12);
+  padding: 0px;
+  transition: 0.3s;
+  border-radius: 10px; /* 5px rounded corners */
+  min-width: 90vw;
+  max-width: 90vw;
+  left: 5%;
+}
+
+.button {
+  margin-left: auto;
+  margin-right: auto;
+}

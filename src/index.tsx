@@ -1,24 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
 import './index.css';
 import App from './App';
 import { BrowserRouter as Router } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
+import { AuthProvider } from './authentication';
 import {ElementsProvider} from "./stripe/ElementsProvider";
 
-// call `loadStripe` outside a component's render to avoid
-
 ReactDOM.render(
-    <React.StrictMode>
+  <React.StrictMode>
+    <AuthProvider>
+      <ElementsProvider>
         <Router>
-          <ElementsProvider>
-            <App />
-          </ElementsProvider>
+          <App />
         </Router>
-    </React.StrictMode>,
-    document.getElementById('root')
+      </ElementsProvider>
+    </AuthProvider>
+  </React.StrictMode>,
+  document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
