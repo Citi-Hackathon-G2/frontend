@@ -5,7 +5,6 @@ import React, {
   useEffect,
   FC,
 } from 'react';
-import { Spin } from 'antd';
 import firebase from 'firebase/app';
 import {
   login,
@@ -20,7 +19,7 @@ type AuthProviderProps = {
 };
 
 type AuthContextType = {
-  firebaseUser: firebase.User | null;
+  firebaseUser: firebase.User | null | undefined;
   idToken: string;
   user: UserModel | null;
   isAuthenticated: boolean;
@@ -30,7 +29,7 @@ type AuthContextType = {
 };
 
 const AuthContext = createContext<AuthContextType>({
-  firebaseUser: null,
+  firebaseUser: undefined,
   idToken: '',
   user: null,
   isAuthenticated: false,
@@ -40,7 +39,8 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
-  const firebaseUser: firebase.User | null = useFirebaseAuthentication();
+  const firebaseUser: firebase.User | null | undefined =
+    useFirebaseAuthentication();
   const [idToken, setIdToken] = useState<string>('');
   const [userUid, setUserUid] = useState<string>('');
   const user: UserModel | null = useUser(userUid);
@@ -50,11 +50,14 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     setIsLoading(true);
     (async () => {
+      if (firebaseUser === undefined) {
+        // ignore on mount
+        return;
+      }
+
       if (firebaseUser === null) {
-        // setUser(null);
         setIdToken('');
       } else {
-        // TODO: may need to setInterval to refresh idToken periodically
         try {
           const [userUid, idToken] = await Promise.all([
             firebaseUser.uid,
@@ -93,18 +96,3 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 export const useAuth = (): AuthContextType => {
   return useContext<AuthContextType>(AuthContext);
 };
-/*
-https://medium.com/@tafka_labs/auth-redirect-in-nextjs-3a3a524c0a06
-export const ProtectRoute:  = ({ Component: Component, ...rest }) => {
-  return () => {
-    const { firebaseUser, isAuthenticated, loading } = useAuth();
-    const router = useRouter();
-
-    useEffect(() => {
-      if (!isAuthenticated && !loading) Router.push("/login");
-    }, [loading, isAuthenticated]);
-
-    return <Component {...rest} />;
-  };
-};
-*/

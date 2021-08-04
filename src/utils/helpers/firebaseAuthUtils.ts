@@ -13,15 +13,16 @@ async function logout() {
 async function getCurrentFirebaseUser(): Promise<firebase.User | null> {
   return new Promise((resolve) => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
-      // unsubscribe();
+      unsubscribe();
       resolve(authUser);
     });
   });
 }
 
-function useFirebaseAuthentication(): firebase.User | null {
-  const [firebaseUser, setFirebaseUser] = useState<firebase.User | null>(null);
-  // console.log(firebaseUser);
+function useFirebaseAuthentication(): firebase.User | null | undefined {
+  const [firebaseUser, setFirebaseUser] = useState<
+    firebase.User | null | undefined
+  >(undefined);
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       setFirebaseUser(authUser);
