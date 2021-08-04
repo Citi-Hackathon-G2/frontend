@@ -1,7 +1,7 @@
 import { HeartOutlined, TagOutlined, WalletOutlined } from '@ant-design/icons';
 import { Card } from 'antd';
 import React from 'react';
-import styles from './me.module.css';
+import styles from './wallet.module.css';
 export const Wallet: React.FC<{}> = () => {
   return (
     <div className={styles.container}>
