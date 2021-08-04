@@ -1,11 +1,11 @@
 import {
-    Button,
-    Card,
-    Checkbox,
-    Form,
-    Input,
-    notification,
-    Typography,
+  Button,
+  Card,
+  Checkbox,
+  Form,
+  Input,
+  notification,
+  Typography,
 } from 'antd';
 import React, { Component, useState } from 'react';
 import { Route, useHistory } from 'react-router';
@@ -13,40 +13,42 @@ import { Link } from 'react-router-dom';
 import styles from './login.module.css';
 import QrReader from 'react-qr-reader';
 
-const firebase = require('firebase');
+import firebase from 'firebase';
+
 require('firebase/functions');
 
 export const scanQR = () => {
-    const [result, setResult] = useState<any>();
+  let history = useHistory();
+  const [result, setResult] = useState<any>();
 
-    //wait for scan
-    const handleScan = (data: any) => {
-        if (data) {
-            console.log(data);
-            setResult(data.toString()); ///getStringValue() or toString()
-        }
+  //wait for scan
+  const handleScan = (data: any) => {
+    if (data) {
+      console.log(data);
+      setResult(data.toString()); ///getStringValue() or toString()
+    }
 
-        if (result != undefined) {
-            callFirebaseRedeemFunction();
-        }
-    };
+    if (result != undefined) {
+      callFirebaseRedeemFunction();
+    }
+  };
 
-    const handleError = (err: TypeError) => {
-        console.error(err);
-    };
+  const handleError = (err: TypeError) => {
+    console.error(err);
+  };
 
-    const navToCashierHome = () => {
-        //gobackhome
-        //history.push(PATHS. );
-    };
+  const navToCashierHome = () => {
+    //gobackhome
+    history.goBack();
+  };
 
-    //const [loading, setLoading] = useState<boolean>(false);
+  //const [loading, setLoading] = useState<boolean>(false);
 
-    //using webV8
-    const callFirebaseRedeemFunction = () => {
-        if (result !== undefined) {
-            console.log(result);
-            /*var redeemVoucher = firebase.functions().httpsCallable("return something");
+  //using webV8
+  const callFirebaseRedeemFunction = () => {
+    if (result !== undefined) {
+      console.log(result);
+      /*var redeemVoucher = firebase.functions().httpsCallable("return something");
         //setLoading(true);
         redeemVoucher({ voucherId: result })
             .then((res: any) => {
@@ -58,33 +60,33 @@ export const scanQR = () => {
                 notification.error({message});
                 //setLoading(false);
             }); */
-        }
-    };
+    }
+  };
 
-    return (
-        <div>
-            <QrReader
-                delay={300}
-                onError={handleError}
-                onScan={handleScan}
-                style={{ width: '100%' }}
-            />
-            <div className="horizontal-container">
-                <Button
-                    style={{
-                        backgroundColor: '#B15983',
-                        border: '#B15983',
-                        position: 'absolute',
-                        marginLeft: '5%',
-                    }}
-                    type="link"
-                    onClick={navToCashierHome}
-                >
-                    Back
-                </Button>
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      <QrReader
+        delay={300}
+        onError={handleError}
+        onScan={handleScan}
+        style={{ width: '100%' }}
+      />
+      <div className="horizontal-container">
+        <Button
+          style={{
+            backgroundColor: '#B15983',
+            border: '#B15983',
+            position: 'absolute',
+            marginLeft: '5%',
+          }}
+          type="link"
+          onClick={navToCashierHome}
+        >
+          Back
+        </Button>
+      </div>
+    </div>
+  );
 };
 
 export default scanQR;
