@@ -10,6 +10,7 @@ import logo from './logo.svg';
 import './App.css';
 import { ShopOutlined } from '@ant-design/icons';
 import { Home, Me, Register, Wallet } from './pages';
+import scanQR from './cashier/scanQR';
 import { PATHS } from './config/routes';
 import { SplashScreenContainer } from './components';
 import { AuthProvider, useAuth } from './authentication';
@@ -36,6 +37,11 @@ export const Base: React.FC<{}> = () => {
                 isAuthenticated={isAuthenticated}
                 path={PATHS.ME}
                 component={Me}
+            ></GuardedRoute>
+            <GuardedRoute
+                isAuthenticated={isAuthenticated}
+                path={PATHS.SCAN}
+                component={scanQR}
             ></GuardedRoute>
             <AuthRoute
                 isAuthenticated={isAuthenticated}
