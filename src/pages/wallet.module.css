@@ -1,10 +1,11 @@
 .container {
-  height: 100vh;
+  height: 91vh;
   width: 100vw;
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  align-items: center;
 }
 
 .yellowCard {
@@ -14,6 +15,40 @@
   border-radius: 10px; /* 5px rounded corners */
   min-width: 90vw;
   max-width: 90vw;
-  left: 5%;
   background-color: #edf67d;
+  height: 25vh;
+}
+
+.cornerCounter {
+  margin-left: auto;
+  margin-top: 0%;
+  background-color: #b15983;
+  padding: 0px 10px 0px 10px;
+  border-radius: 10px;
+}
+
+.scrollContainer {
+  margin-top: 1%;
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.innerCard {
+  padding: 0px;
+  transition: 0.3s;
+  border-radius: 10px; /* 5px rounded corners */
+  height: 13vh;
+  width: 20vw;
+  margin: 10px;
+}
+
+.balanceContainer {
+  height: 15vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
 }
