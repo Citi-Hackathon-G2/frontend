@@ -1,0 +1,9 @@
+.container {
+  padding: 1rem;
+}
+
+.shopContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

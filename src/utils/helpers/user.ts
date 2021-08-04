@@ -1,7 +1,7 @@
+import { useEffect, useState } from 'react';
+
 import { Shop, User, UserModel, Voucher } from '../types';
 import { db } from '../../config/firebase.config';
-import { useEffect, useState } from 'react';
-import firebase from 'firebase/app';
 
 function useUser(id: string) {
   const [user, setUser] = useState<User | null>(null);
@@ -9,7 +9,6 @@ function useUser(id: string) {
   const [vouchers, setVouchers] = useState<Voucher[]>([]);
 
   useEffect(() => {
-    // console.log('user fired', id);
     if (id === '') {
       setUser(null);
       setShops([]);
@@ -17,11 +16,10 @@ function useUser(id: string) {
       return;
     }
 
-    db.collection('user')
+    const unsubscribe = db
+      .collection('user')
       .doc(id)
       .onSnapshot({}, (userDocumentData) => {
-        // unsubscribe()
-
         const user = userDocumentData.data() as User;
 
         if (!user) {
@@ -32,6 +30,8 @@ function useUser(id: string) {
           setUser(user);
         }
       });
+
+    return () => unsubscribe();
   }, [id]);
 
   useEffect(() => {
@@ -42,24 +42,23 @@ function useUser(id: string) {
 
     const { shops } = user;
     const shopsArr: Shop[] = [];
-    shops.forEach((shopRef) => {
-      const unSubShop = shopRef.onSnapshot({}, (shop) => {
+    for (const ref of shops) {
+      const unSubShop = ref.onSnapshot((shop) => {
         shopsArr.push(shop.data() as Shop);
+        setShops([...shopsArr]);
       });
       unsubscribeArr.push(unSubShop);
-    });
-    setShops(shopsArr);
+    }
 
     const { vouchers } = user;
     const vouchersArr: Voucher[] = [];
     vouchers.forEach((voucherRef) => {
-      const unsubVoucher = voucherRef.onSnapshot({}, (voucher) => {
+      const unsubVoucher = voucherRef.onSnapshot((voucher) => {
         vouchersArr.push(voucher.data() as Voucher);
+        setVouchers([...vouchersArr]);
       });
       unsubscribeArr.push(unsubVoucher);
     });
-
-    setVouchers(vouchersArr);
 
     return () => {
       unsubscribeArr.forEach((unsubFunc) => unsubFunc());
