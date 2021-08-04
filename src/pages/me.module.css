@@ -4,7 +4,8 @@
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: start;
+
 }
 
 .yellowCard {
@@ -15,5 +16,9 @@
   min-width: 90vw;
   max-width: 90vw;
   left: 5%;
-  background-color: #edf67d;
+}
+
+.button {
+  margin-left: auto;
+  margin-right: auto;
 }
