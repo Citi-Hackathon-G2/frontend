@@ -3,7 +3,10 @@ import { Button, Card } from 'antd';
 import React from 'react';
 import { useHistory } from 'react-router';
 import { useAuth } from '../authentication';
+import { VoucherCard } from '../components/voucher';
+import { db, firebaseFunctions } from '../config/firebase.config';
 import { PATHS } from '../config/routes';
+import { Voucher } from '../utils';
 import styles from './me.module.css';
 
 export const Me: React.FC<{}> = () => {
@@ -14,11 +17,18 @@ export const Me: React.FC<{}> = () => {
     await logout();
     history.push(PATHS.LOGIN);
   };
-
+  const handleBuy = async () => {
+    try {
+      const buyVoucher = firebaseFunctions.httpsCallable('buyVoucher');
+      await buyVoucher({ voucherId: 'tgP7nUh9kfoH9rsUEg9c' });
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <>
       <div className={styles.container}>
-        <div style={{ marginTop: '10%' }}></div>
+        <div style={{ marginTop: '0.5rem' }}></div>
         <Card className={styles.yellowCard}>
           <div
             style={{
@@ -64,7 +74,26 @@ export const Me: React.FC<{}> = () => {
             </div>
           </div>
         </Card>
-        <div style={{ marginTop: '5%' }}></div>
+        {user == null
+          ? null
+          : user.vouchers.map((voucher) => (
+              <VoucherCard
+                style={{
+                  marginTop: '0.5rem',
+                  marginLeft: '0.5rem',
+                  marginRight: '0.5rem',
+                }}
+                key={voucher.id}
+                {...voucher}
+              />
+            ))}
+
+        <div style={{ marginTop: '0.5rem' }}></div>
+        <div className={styles.button}>
+          <Button type="primary" onClick={handleBuy}>
+            buy
+          </Button>
+        </div>
         <div className={styles.button}>
           <Button type="primary" onClick={handleLogout}>
             Logout

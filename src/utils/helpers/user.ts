@@ -58,6 +58,7 @@ function useUser(id: string) {
         vouchersArr.push({
           ...data,
           id: voucher.id,
+          expireAt: data?.expireAt?.toDate(),
         } as Voucher);
         setVouchers([...vouchersArr]);
       });
