@@ -2,8 +2,7 @@ import React from "react";
 import {loadStripe} from "@stripe/stripe-js";
 import {Elements} from "@stripe/react-stripe-js";
 
-const STRIPE_TEST_API_KEY = "pk_test_CFpQszLbMJd6mXIFwRf0OBzi00ghEaNow3";
-const STRIPE_API_KEY = process.env.STRIPE_API_KEY ?? STRIPE_TEST_API_KEY;
+const STRIPE_API_KEY = process.env.STRIPE_API_KEY ?? "your stripe test api key here";
 if (!STRIPE_API_KEY) {
   throw new Error(`Stripe API key must be present. Current: ${STRIPE_API_KEY}`);
 }
