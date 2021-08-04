@@ -1,14 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import './index.css';
 import App from './App';
 import { BrowserRouter as Router } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
+import {ElementsProvider} from "./stripe/ElementsProvider";
+
+// call `loadStripe` outside a component's render to avoid
 
 ReactDOM.render(
     <React.StrictMode>
         <Router>
+          <ElementsProvider>
             <App />
+          </ElementsProvider>
         </Router>
     </React.StrictMode>,
     document.getElementById('root')
