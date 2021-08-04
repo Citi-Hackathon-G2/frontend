@@ -1,12 +1,12 @@
 import { MailOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 import {
-    Button,
-    Card,
-    Checkbox,
-    Form,
-    Input,
-    notification,
-    Typography,
+  Button,
+  Card,
+  Checkbox,
+  Form,
+  Input,
+  notification,
+  Typography,
 } from 'antd';
 import React, { useState } from 'react';
 import { Route, useHistory } from 'react-router';
@@ -18,118 +18,98 @@ import styles from './login.module.css';
 const { Title } = Typography;
 
 export const Register: React.FC<{}> = () => {
-    let history = useHistory();
-    const { login } = useAuth();
-    const [loading, setLoading] = useState<boolean>(false);
+  let history = useHistory();
+  const { login } = useAuth();
+  const [loading, setLoading] = useState<boolean>(false);
 
-    const onFinish = async ({ username, email, password }: RegisterRequest) => {
-        setLoading(true);
-        try {
-            await register({ username, email, password });
-            await login(email, password); // login first then create user
-            // await createUser(username); // create user in firestore
-            history.push(PATHS.HOME);
-        } catch (err) {
-            console.log(err);
-            notification.error({
-                message: err.message,
-            });
-            setLoading(false);
-        }
-    };
-    const navToLogin = () => {
-        history.push(PATHS.LOGIN);
-    };
-    return (
-        <div className={styles.container}>
-            <div className={styles.center}>
-                <Card className={styles.card}>
-                    <Title level={3}>Register</Title>
-                    <Form
-                        initialValues={{ remember: true }}
-                        onFinish={onFinish}
-                    >
-                        <Form.Item
-                            name="username"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your username!',
-                                },
-                            ]}
-                        >
-                            <Input
-                                prefix={
-                                    <UserOutlined className="site-form-item-icon" />
-                                }
-                                type="text"
-                                placeholder="Username"
-                                disabled={loading}
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            name="email"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your email!',
-                                },
-                            ]}
-                        >
-                            <Input
-                                prefix={
-                                    <MailOutlined className="site-form-item-icon" />
-                                }
-                                type="email"
-                                placeholder="Email"
-                                disabled={loading}
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            name="password"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your password!',
-                                },
-                            ]}
-                        >
-                            <Input
-                                prefix={
-                                    <LockOutlined className="site-form-item-icon" />
-                                }
-                                type="password"
-                                placeholder="Password"
-                                disabled={loading}
-                            />
-                        </Form.Item>
-                        <Form.Item>
-                            <Form.Item
-                                name="remember"
-                                valuePropName="checked"
-                                noStyle
-                            >
-                                <Checkbox disabled={loading}>
-                                    Remember me
-                                </Checkbox>
-                            </Form.Item>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button
-                                loading={loading}
-                                block
-                                type="primary"
-                                htmlType="submit"
-                            >
-                                Register
-                            </Button>
-                        </Form.Item>
-                        <Button type="link" onClick={navToLogin}>
-                            Have an account? Login now!
-                        </Button>
-                    </Form>
-                </Card>
-            </div>
-        </div>
-    );
+  const onFinish = async ({ username, email, password }: RegisterRequest) => {
+    setLoading(true);
+    try {
+      await register({ username, email, password });
+      await login(email, password); // login first then create user
+
+      history.push(PATHS.HOME);
+    } catch (err) {
+      console.log(err);
+      notification.error({
+        message: err.message,
+      });
+      setLoading(false);
+    }
+  };
+  const navToLogin = () => {
+    history.push(PATHS.LOGIN);
+  };
+  return (
+    <div className={styles.container}>
+      <div className={styles.center}>
+        <Card className={styles.card}>
+          <Title level={3}>Register</Title>
+          <Form initialValues={{ remember: true }} onFinish={onFinish}>
+            <Form.Item
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your username!',
+                },
+              ]}
+            >
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                type="text"
+                placeholder="Username"
+                disabled={loading}
+              />
+            </Form.Item>
+            <Form.Item
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your email!',
+                },
+              ]}
+            >
+              <Input
+                prefix={<MailOutlined className="site-form-item-icon" />}
+                type="email"
+                placeholder="Email"
+                disabled={loading}
+              />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your password!',
+                },
+              ]}
+            >
+              <Input
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                type="password"
+                placeholder="Password"
+                disabled={loading}
+              />
+            </Form.Item>
+            <Form.Item>
+              <Form.Item name="remember" valuePropName="checked" noStyle>
+                <Checkbox disabled={loading}>Remember me</Checkbox>
+              </Form.Item>
+            </Form.Item>
+            <Form.Item>
+              <Button loading={loading} block type="primary" htmlType="submit">
+                Register
+              </Button>
+            </Form.Item>
+            <Button type="link" onClick={navToLogin}>
+              Have an account? Login now!
+            </Button>
+          </Form>
+        </Card>
+      </div>
+    </div>
+  );
 };
