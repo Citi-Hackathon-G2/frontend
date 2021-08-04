@@ -1,4 +1,5 @@
 import React from 'react';
+import './App.css';
 import { ShopOutlined } from '@ant-design/icons';
 
 import { Home, Me, Register, Wallet, Cashier } from './pages';
