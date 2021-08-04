@@ -11,6 +11,7 @@ import { AuthRoute, GuardedRoute } from './guarded-route';
 import { SplashScreenContainer } from './components';
 
 import './App.css';
+import { ShopPage } from './pages/shop';
 
 export const Base: React.FC<{}> = () => {
   const { isLoading, isAuthenticated } = useAuth();
@@ -45,6 +46,11 @@ export const Base: React.FC<{}> = () => {
         isAuthenticated={isAuthenticated}
         path={PATHS.SCAN}
         component={scanQR}
+      ></GuardedRoute>
+      <GuardedRoute
+        isAuthenticated={isAuthenticated}
+        path={PATHS.SHOP}
+        component={ShopPage}
       ></GuardedRoute>
       <AuthRoute
         isAuthenticated={isAuthenticated}

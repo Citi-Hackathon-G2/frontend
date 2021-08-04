@@ -42,6 +42,8 @@ export const Wallet: React.FC<{}> = () => {
           <Card className={styles.innerCard}>test</Card>
           <Card className={styles.innerCard}>test</Card>
           <Card className={styles.innerCard}>test</Card>
+          <Card className={styles.innerCard}>test</Card>
+          <Card className={styles.innerCard}>test</Card>
         </div>
       </Card>
 

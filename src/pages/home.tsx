@@ -1,32 +1,33 @@
 import {
-  Button,
   Card,
-  Checkbox,
   Form,
   Input,
-  notification,
-  Typography,
   Divider,
   Space,
   Col,
   Row,
+  List,
+  Button,
 } from 'antd';
-import styles from './login.module.css';
-import React, { useState } from 'react';
+import styles from './home.module.css';
+import React, { useEffect, useState } from 'react';
 import {
   TagOutlined,
   WalletOutlined,
   SearchOutlined,
   ShoppingOutlined,
 } from '@ant-design/icons';
-import { Route, useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router';
 import { PATHS } from '../config/routes';
 import { useAuth } from '../authentication';
+import { Shop } from '../utils';
+import { db } from '../config/firebase.config';
 
 export const Home: React.FC<{}> = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { user } = useAuth();
+  const [shops, setShops] = useState<Shop[]>([]);
+
   const onFinish = async ({ searchquery }: any) => {
     setLoading(true);
     try {
@@ -42,11 +43,46 @@ export const Home: React.FC<{}> = () => {
     history.push(PATHS.SCAN);
   };
 
+  const handleEnterShop = async (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    id: string
+  ) => {
+    history.push('shop/' + id);
+  };
+
+  useEffect(() => {
+    (async () => {
+      const shopRef = await db.collection('shop').get();
+      const shopArr = shopRef.docs.map((doc) => {
+        return { ...doc.data(), id: doc.id } as Shop;
+      });
+      setShops(shopArr);
+      // db.collection('voucher')
+      //   .where('shop', '==', shopRef)
+      //   .onSnapshot((snap) => {
+      //     const vouchers: Voucher[] = [];
+      //     snap.forEach((doc) => {
+      //       const data = doc.data();
+      //       vouchers.push({
+      //         ...data,
+      //         id: doc.id,
+      //         expireAt: data.expireAt?.toDate(),
+      //       } as Voucher);
+      //     });
+      //     vouchers.sort(
+      //       (v1, v2) => v2.createdAt.valueOf() - v1.createdAt.valueOf()
+      //     );
+      //     setCurrentShop(shop);
+      //     setVouchers(vouchers);
+      //   });
+    })();
+  }, []);
+
   return (
     <div style={{ height: '100vh', overflowY: 'scroll' }}>
       <div className="header-style">Hi {user?.username ?? 'user'},</div>
       <div className="mid-header-style">Welcome Back!</div>
-      <Card
+      {/* <Card
         className={styles.card}
         style={{ left: '5%', backgroundColor: '#edf67d' }}
       >
@@ -83,9 +119,9 @@ export const Home: React.FC<{}> = () => {
             </Form.Item>
           </Space>
         </Form>
-      </Card>
+      </Card> */}
       <Card
-        className={styles.card}
+        className={styles.maroonCard}
         style={{
           left: '5%',
           marginTop: '5%',
@@ -99,7 +135,36 @@ export const Home: React.FC<{}> = () => {
           placeholder="Search for shop"
           disabled={loading}
         />
-        <div className="site-card-wrapper">
+        <div style={{ marginTop: '2rem' }}></div>
+        <List
+          itemLayout="horizontal"
+          pagination={{ position: 'bottom' }}
+          grid={{ gutter: 12, column: 2 }}
+          dataSource={shops}
+          renderItem={(shop: Shop) => {
+            // console.log(shop);
+            return (
+              <List.Item>
+                <Card title={shop.name}>
+                  <Button onClick={(e) => handleEnterShop(e, shop.id)}>
+                    {' '}
+                    ENTER
+                  </Button>
+                </Card>
+              </List.Item>
+            );
+          }}
+        />
+        {/* <div className={styles.scrollContainer}>
+          <Card className={styles.innerCard}>test</Card>
+          <Card className={styles.innerCard}>test</Card>
+          <Card className={styles.innerCard}>test</Card>
+          <Card className={styles.innerCard}>test</Card>
+          <Card className={styles.innerCard}>test</Card>
+          <Card className={styles.innerCard}>test</Card>
+          <Card className={styles.innerCard}>test</Card>
+        </div> */}
+        {/* <div className="site-card-wrapper">
           <Row
             style={{
               marginTop: '3%',
@@ -149,10 +214,7 @@ export const Home: React.FC<{}> = () => {
               </Card>
             </Col>
           </Row>
-          <button style={{ backgroundColor: '#b15983' }} onClick={navToScan}>
-            Removetislater
-          </button>
-        </div>
+        </div> */}
       </Card>
     </div>
   );
