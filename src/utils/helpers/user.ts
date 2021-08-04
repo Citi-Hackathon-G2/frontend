@@ -44,7 +44,7 @@ function useUser(id: string) {
     const shopsArr: Shop[] = [];
     for (const ref of shops) {
       const unSubShop = ref.onSnapshot((shop) => {
-        shopsArr.push(shop.data() as Shop);
+        shopsArr.push({ ...shop.data(), id: shop.id } as Shop);
         setShops([...shopsArr]);
       });
       unsubscribeArr.push(unSubShop);
@@ -52,13 +52,17 @@ function useUser(id: string) {
 
     const { vouchers } = user;
     const vouchersArr: Voucher[] = [];
-    vouchers.forEach((voucherRef) => {
-      const unsubVoucher = voucherRef.onSnapshot((voucher) => {
-        vouchersArr.push(voucher.data() as Voucher);
+    for (const ref of vouchers) {
+      const unsubVoucher = ref.onSnapshot((voucher) => {
+        const data = voucher.data();
+        vouchersArr.push({
+          ...data,
+          id: voucher.id,
+        } as Voucher);
         setVouchers([...vouchersArr]);
       });
       unsubscribeArr.push(unsubVoucher);
-    });
+    }
 
     return () => {
       unsubscribeArr.forEach((unsubFunc) => unsubFunc());
