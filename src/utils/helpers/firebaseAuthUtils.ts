@@ -19,8 +19,10 @@ async function getCurrentFirebaseUser(): Promise<firebase.User | null> {
   });
 }
 
-function useFirebaseAuthentication(): firebase.User | null {
-  const [firebaseUser, setFirebaseUser] = useState<firebase.User | null>(null);
+function useFirebaseAuthentication(): firebase.User | null | undefined {
+  const [firebaseUser, setFirebaseUser] = useState<
+    firebase.User | null | undefined
+  >(undefined);
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       setFirebaseUser(authUser);
