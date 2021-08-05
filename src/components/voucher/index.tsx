@@ -1,5 +1,5 @@
 import { FC, CSSProperties } from 'react';
-import { Card, Tag, Badge } from 'antd';
+import { Card, Tag, Badge, Button } from 'antd';
 
 import { Voucher } from '../../utils';
 
@@ -12,6 +12,11 @@ const { Meta } = Card;
 type VoucherCardProps = Voucher & {
   style?: CSSProperties | undefined;
   displayView?: boolean | undefined;
+  displayTransfer?: boolean | undefined;
+  handleTransfer?: (e: any) => Promise<void>;
+
+  displayRedeem?: boolean | undefined;
+  handleRedeem?: (e: any) => Promise<void>;
 };
 
 export const VoucherCard: FC<VoucherCardProps> = ({
@@ -23,6 +28,10 @@ export const VoucherCard: FC<VoucherCardProps> = ({
   user,
   redeemedAt,
   displayView,
+  displayTransfer,
+  handleTransfer,
+  displayRedeem,
+  handleRedeem,
   id,
 }) => {
   let history = useHistory();
@@ -46,7 +55,6 @@ export const VoucherCard: FC<VoucherCardProps> = ({
             key="rightCircle"
             onClick={handleViewVoucher}
           >
-            {' '}
             View Voucher
           </RightCircleOutlined>
         ) : null,
@@ -69,15 +77,29 @@ export const VoucherCard: FC<VoucherCardProps> = ({
         <Tag color={isAvailable ? 'green' : 'red'}>
           {isAvailable ? 'Available' : 'Unavailable'}
         </Tag>
+        {redeemedAt ? <Tag color="red">Redeemed</Tag> : null}
       </div>
+      {displayTransfer && handleTransfer ? (
+        <Button
+          style={{ marginTop: '0.5rem' }}
+          type="primary"
+          onClick={handleTransfer}
+        >
+          Transfer Voucher
+        </Button>
+      ) : null}
+
+      {displayRedeem && handleRedeem ? (
+        <Button
+          style={{ marginLeft: '1rem', marginTop: '0.5rem' }}
+          type="primary"
+          onClick={handleRedeem}
+        >
+          Redeem Voucher
+        </Button>
+      ) : null}
     </Card>
   );
 
-  return redeemedAt ? (
-    <Badge.Ribbon text="Redeemed" color="red">
-      {card}
-    </Badge.Ribbon>
-  ) : (
-    card
-  );
+  return card;
 };
