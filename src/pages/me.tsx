@@ -8,7 +8,7 @@ import { db, firebaseFunctions } from '../config/firebase.config';
 import { PATHS } from '../config/routes';
 import { Voucher } from '../utils';
 import styles from './me.module.css';
-import QRCode from "react-qr-code";
+import QRCode from 'react-qr-code';
 
 export const Me: React.FC<{}> = () => {
   let history = useHistory();
@@ -151,32 +151,22 @@ export const Me: React.FC<{}> = () => {
         {user == null
           ? null
           : user.vouchers.map((voucher) => (
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <VoucherCard
-                style={{
-                  marginTop: '0.5rem',
-                  marginLeft: '0.5rem',
-                  marginRight: '0.5rem',
-                }}
-                key={voucher.id}
-                {...voucher}
-              />
-              <div className={styles.button} style={{ marginTop: '0.5rem' }}>
-                <Button
-                  type="dashed"
-                  onClick={(e) => handleSetModalVisible(e, voucher)}
-                >
-                  Transfer Voucher
-                </Button>
-                <Button
-                  type="dashed"
-                  onClick={(e) => handleSetQRModalVisible(e, voucher)}
-                >
-                  Redeem
-                </Button>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <VoucherCard
+                  style={{
+                    marginTop: '0.5rem',
+                    marginLeft: '0.5rem',
+                    marginRight: '0.5rem',
+                  }}
+                  key={voucher.id}
+                  {...voucher}
+                  displayTransfer={true}
+                  handleTransfer={(e) => handleSetModalVisible(e, voucher)}
+                  displayRedeem={!voucher.redeemedAt}
+                  handleRedeem={(e) => handleSetQRModalVisible(e, voucher)}
+                />
               </div>
-            </div>
-          ))}
+            ))}
         <Modal
           title={`Transfer Voucher: ${currentVoucher?.title}`}
           visible={isModalVisible}
@@ -222,20 +212,20 @@ export const Me: React.FC<{}> = () => {
           </div>
         </Modal>
         <div style={{ marginTop: '0.5rem' }}></div>
-      {/* <div className={styles.button}>
+        {/* <div className={styles.button}>
           <Button type="primary" onClick={handleBuy}>
             buy
           </Button>
         </div> */}
         <div className={styles.button}>
-        <Button type ="primary" onClick={handleLogout}>
-        Logout
-        </Button>
+          <Button type="primary" onClick={handleLogout}>
+            Logout
+          </Button>
         </div>
         <div className={styles.button}>
-        <Button type ="primary" onClick={handleSwitchToCashier}>
-        Switch To Cashier
-        </Button>
+          <Button type="primary" onClick={handleSwitchToCashier}>
+            Switch To Cashier
+          </Button>
         </div>
       </div>
     </>

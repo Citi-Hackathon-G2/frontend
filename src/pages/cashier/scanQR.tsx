@@ -6,11 +6,9 @@ import {
   Input,
   notification,
   Typography,
-  Space
+  Space,
 } from 'antd';
-import {
-  CloseCircleFilled,
-} from '@ant-design/icons';
+import { CloseCircleFilled } from '@ant-design/icons';
 import React, { Component, useState } from 'react';
 import { Route, useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -23,9 +21,6 @@ import { firebaseFunctions } from '../../config/firebase.config';
 import { db } from '../../config/firebase.config';
 require('firebase/functions');
 import { PATHS } from '../../config/routes';
-//import * as cors from 'cors';
-//const corsHandler = cors({ origin: true });
-//vouchers.push({...data, id: doc.id, redeemedAt: data.redeemedAt?.toDate()}})
 
 export const scanQR = () => {
   let history = useHistory();
@@ -40,6 +35,8 @@ export const scanQR = () => {
         const voucherId: string = data.toString();
         console.log(voucherId);
         await redeemVoucher({ voucherId }); //oFZc7OIVuFpWR56EsOgM
+        notification.success({ message: 'Voucher Redeemed' });
+        history.push(PATHS.CASHIER);
       } catch (err) {
         console.log(err);
       }
@@ -55,61 +52,35 @@ export const scanQR = () => {
     history.push(PATHS.CASHIER);
   };
 
-  //const [loading, setLoading] = useState<boolean>(false);
-
-  //using webV8
-  /* callFirebaseRedeemFunction = () => {
-    if (result !== undefined) {
-      console.log(result);
-      var redeemVoucher = firebase.functions().httpsCallable("redeem voucher");
-        //setLoading(true);
-        redeemVoucher({ voucherId: result })
-            .then((res: any) => {
-                console.log(res.data.output); //result of the cloud function returns redeem success??
-                
-            }).catch((error:any) => {
-                var message = error.message;
-                console.log(message);
-                notification.error({message});
-                //setLoading(false);
-            }); 
-    }
-  };*/
-
   return (
     <div>
-      
-     
-
-        <div style={{ height: '100vh', overflowY: 'scroll' }}>
+      <div style={{ height: '70vh', overflowY: 'scroll' }}>
         <Button
-  
           style={{
             backgroundColor: 'white',
             border: '#B15983',
             position: 'absolute',
             marginLeft: '5%',
-            width:'100vh'
+            width: '100vh',
           }}
           type="link"
-          icon={ <CloseCircleFilled />}
+          icon={<CloseCircleFilled />}
           onClick={navToCashierHome}
         >
           Back
         </Button>
         <QrReader
-            delay={300}
-            onError={handleError}
-            onScan={handleScan}
-            style={{ width: '100%' , marginTop:"5%"}}
+          delay={300}
+          onError={handleError}
+          onScan={handleScan}
+          style={{
+            width: '50%',
+            marginTop: '5%',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
         />
-        
-          
-
-     
-        </div>
-      
-     
+      </div>
     </div>
   );
 };
