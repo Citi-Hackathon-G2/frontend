@@ -7,6 +7,7 @@ import {
   notification,
   Typography,
   Space,
+  Spin,
 } from 'antd';
 import { CloseCircleFilled } from '@ant-design/icons';
 import React, { Component, useState } from 'react';
@@ -25,11 +26,13 @@ import { PATHS } from '../../config/routes';
 export const scanQR = () => {
   let history = useHistory();
   const [result, setResult] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   //wait for scan
   const handleScan = async (data: any) => {
     if (data) {
       try {
+        setLoading(true);
         //console.log(data);
         setResult(data.toString()); ///getStringValue() or toString()
         const voucherId: string = data.toString();
@@ -39,6 +42,7 @@ export const scanQR = () => {
         history.push(PATHS.CASHIER);
       } catch (err) {
         console.log(err);
+        setLoading(false);
       }
     }
   };
@@ -69,17 +73,19 @@ export const scanQR = () => {
         >
           Back
         </Button>
-        <QrReader
-          delay={300}
-          onError={handleError}
-          onScan={handleScan}
-          style={{
-            width: '50%',
-            marginTop: '5%',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}
-        />
+        <Spin spinning={loading}>
+          <QrReader
+            delay={300}
+            onError={handleError}
+            onScan={handleScan}
+            style={{
+              width: '50%',
+              marginTop: '5%',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+            }}
+          />
+        </Spin>
       </div>
     </div>
   );

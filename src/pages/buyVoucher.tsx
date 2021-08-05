@@ -146,7 +146,11 @@ export const buyVoucher: React.FC<{}> = () => {
         </div>
         <div
           className="text-style"
-          style={{ wordBreak: 'break-all', marginRight: '5%', marginBottom: '2vh' }}
+          style={{
+            wordBreak: 'break-all',
+            marginRight: '5%',
+            marginBottom: '2vh',
+          }}
         >
           {currentVoucher.description}
         </div>
@@ -186,7 +190,7 @@ export const buyVoucher: React.FC<{}> = () => {
         </div>
 
         <Modal
-          title={`Transfer Voucher: ${currentVoucher?.title}`}
+          title={`Buy Voucher: ${currentVoucher?.title}`}
           visible={isModalVisible}
           // okButtonProps={{}}
           onOk={buyVoucherForm.submit}
