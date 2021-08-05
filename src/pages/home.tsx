@@ -45,9 +45,7 @@ export const Home: React.FC<{}> = () => {
   };
 
   let history = useHistory();
-  const navToScan = () => {
-    history.push(PATHS.SCAN);
-  };
+ 
 
   const handleEnterShop = async (
     e: React.MouseEvent<HTMLElement, MouseEvent>,

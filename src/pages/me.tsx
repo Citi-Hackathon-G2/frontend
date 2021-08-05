@@ -22,6 +22,11 @@ export const Me: React.FC<{}> = () => {
     await logout();
     history.push(PATHS.LOGIN);
   };
+
+  const handleSwitchToCashier = async () => {
+    history.push(PATHS.CASHIER);
+  };
+
   const handleBuy = async () => {
     try {
       const buyVoucher = firebaseFunctions.httpsCallable('buyVoucher');
@@ -225,6 +230,11 @@ export const Me: React.FC<{}> = () => {
         <div className={styles.button}>
         <Button type ="primary" onClick={handleLogout}>
         Logout
+        </Button>
+        </div>
+        <div className={styles.button}>
+        <Button type ="primary" onClick={handleSwitchToCashier}>
+        Switch To Cashier
         </Button>
         </div>
       </div>
