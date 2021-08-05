@@ -22,22 +22,23 @@ require('firebase/functions');
 //const corsHandler = cors({ origin: true });
 //vouchers.push({...data, id: doc.id, redeemedAt: data.redeemedAt?.toDate()}})
 
-
 export const scanQR = () => {
   let history = useHistory();
   const [result, setResult] = useState<any>();
 
   //wait for scan
-  const handleScan = (data: any) => {
+  const handleScan = async (data: any) => {
     if (data) {
-      //console.log(data);
-      setResult(data.toString()); ///getStringValue() or toString()
-      const voucherId: string = data.toString();
-      console.log(voucherId);
-      redeemVoucher({ voucherId: 'v6iPptpMivjuxlhnR4w5' });
+      try {
+        //console.log(data);
+        setResult(data.toString()); ///getStringValue() or toString()
+        const voucherId: string = data.toString();
+        console.log(voucherId);
+        await redeemVoucher({ voucherId: 'oFZc7OIVuFpWR56EsOgM' });
+      } catch (err) {
+        console.log(err);
+      }
     }
-
-    
   };
 
   const handleError = (err: TypeError) => {
@@ -70,9 +71,6 @@ export const scanQR = () => {
     }
   };*/
 
-    
-  
-
   return (
     <div>
       <QrReader
@@ -81,7 +79,7 @@ export const scanQR = () => {
         onScan={handleScan}
         style={{ width: '100%' }}
       />
-     
+
       <div className="horizontal-container">
         <Button
           style={{
