@@ -114,7 +114,6 @@ export const buyVoucher: React.FC<{}> = () => {
           {liked ? (
             <HeartFilled
               style={{
-                color: '#b15983',
                 fontSize: '50px',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -127,7 +126,6 @@ export const buyVoucher: React.FC<{}> = () => {
           ) : (
             <HeartOutlined
               style={{
-                color: '#b15983',
                 fontSize: '50px',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -157,13 +155,11 @@ export const buyVoucher: React.FC<{}> = () => {
           size="large"
           className="white-header-style"
           style={{
-            backgroundColor: '#b15983',
             alignItems: 'center',
             justifyContent: 'center',
             display: 'inline-flex',
             width: '90vw',
             padding: '10px 10px 10px 10px',
-            color: 'white',
             marginLeft: '4%',
           }}
           onClick={(e) => handleSetModalVisible(e, currentVoucher)}
