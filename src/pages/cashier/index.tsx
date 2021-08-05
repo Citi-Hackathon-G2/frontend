@@ -1,6 +1,6 @@
 import { useState, useEffect, FC } from 'react';
 import { Menu, Dropdown, Button, Modal, Input, Form } from 'antd';
-import { DownOutlined, FormOutlined, ShopOutlined } from '@ant-design/icons';
+import { DownOutlined, FormOutlined, ShopOutlined, ScanOutlined } from '@ant-design/icons';
 
 import { useAuth } from '../../authentication';
 
@@ -9,6 +9,8 @@ import { createShop, createVoucher } from './utils/api';
 import { Shop, Voucher } from '../../utils';
 import { VoucherCard } from '../../components/voucher';
 import { db } from '../../config/firebase.config';
+import { useHistory } from 'react-router';
+import { PATHS } from '../../config/routes';
 
 export const Cashier: FC = () => {
   const { user } = useAuth();
@@ -58,6 +60,12 @@ export const Cashier: FC = () => {
         setVouchers(vouchers);
       });
   }, [selectedShop]);
+
+  let history = useHistory();
+  const navtoscanQR = () => {
+    console.log("here");
+    history.push(PATHS.SCAN);
+  }
 
   return (
     <div className={styles.container}>
@@ -160,6 +168,21 @@ export const Cashier: FC = () => {
           />
         ))}
       </div>
+
+      {/* REDEEM SECTION */}
+      <h2 style={{ marginTop: '3rem' }}>Redeem Vouchers</h2>
+      <Button
+        disabled={(vouchers.length==0)}
+        onClick={navtoscanQR}
+        icon={<ScanOutlined />}
+        type="primary"
+        block
+        size="large"
+      >
+        Scan QR
+      </Button>
     </div>
   );
 };
+
+// 

@@ -6,7 +6,11 @@ import {
   Input,
   notification,
   Typography,
+  Space
 } from 'antd';
+import {
+  CloseCircleFilled,
+} from '@ant-design/icons';
 import React, { Component, useState } from 'react';
 import { Route, useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -18,6 +22,7 @@ import firebase from 'firebase';
 import { firebaseFunctions } from '../../config/firebase.config';
 import { db } from '../../config/firebase.config';
 require('firebase/functions');
+import { PATHS } from '../../config/routes';
 //import * as cors from 'cors';
 //const corsHandler = cors({ origin: true });
 //vouchers.push({...data, id: doc.id, redeemedAt: data.redeemedAt?.toDate()}})
@@ -34,7 +39,7 @@ export const scanQR = () => {
         setResult(data.toString()); ///getStringValue() or toString()
         const voucherId: string = data.toString();
         console.log(voucherId);
-        await redeemVoucher({ voucherId: 'oFZc7OIVuFpWR56EsOgM' });
+        await redeemVoucher({ voucherId }); //oFZc7OIVuFpWR56EsOgM
       } catch (err) {
         console.log(err);
       }
@@ -47,7 +52,7 @@ export const scanQR = () => {
 
   const navToCashierHome = () => {
     //gobackhome
-    history.goBack();
+    history.push(PATHS.CASHIER);
   };
 
   //const [loading, setLoading] = useState<boolean>(false);
@@ -73,27 +78,38 @@ export const scanQR = () => {
 
   return (
     <div>
-      <QrReader
-        delay={300}
-        onError={handleError}
-        onScan={handleScan}
-        style={{ width: '100%' }}
-      />
+      
+     
 
-      <div className="horizontal-container">
+        <div style={{ height: '100vh', overflowY: 'scroll' }}>
         <Button
+  
           style={{
-            backgroundColor: '#B15983',
+            backgroundColor: 'white',
             border: '#B15983',
             position: 'absolute',
             marginLeft: '5%',
+            width:'100vh'
           }}
           type="link"
+          icon={ <CloseCircleFilled />}
           onClick={navToCashierHome}
         >
           Back
         </Button>
-      </div>
+        <QrReader
+            delay={300}
+            onError={handleError}
+            onScan={handleScan}
+            style={{ width: '100%' , marginTop:"5%"}}
+        />
+        
+          
+
+     
+        </div>
+      
+     
     </div>
   );
 };
