@@ -1,15 +1,19 @@
-import React, {useState} from 'react';
-import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
+import React, { useState } from 'react';
+import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 
-import {CardSection} from './CardSection';
-import {StripeCardElement, PaymentIntentResult} from "@stripe/stripe-js";
-import {firebaseFunctions} from "../../config/firebase.config";
+import { CardSection } from './CardSection';
+import { StripeCardElement, PaymentIntentResult } from '@stripe/stripe-js';
+import { firebaseFunctions } from '../../config/firebase.config';
+import { Button, Input } from 'antd';
+import { FormInstance } from 'antd/lib/form/Form';
+import { Form } from 'antd';
 
 type CheckoutFormProps = {
   children?: React.ReactNode;
   // stripe-related fields
   voucherId: string;
   quantity: number;
+  formProp: FormInstance<any>;
 };
 
 // TODO temporary
@@ -25,7 +29,7 @@ type SuccessResponse = {
   success: true;
   requiresAction?: boolean | undefined;
   paymentIntentClientSecret?: string | undefined;
-}
+};
 
 type ErrorResponse = {
   code: string;
@@ -35,17 +39,21 @@ type ErrorResponse = {
 
 type APIResponse = SuccessResponse | ErrorResponse;
 
-export const CheckoutForm: React.FC<CheckoutFormProps> = ({ voucherId, quantity }) => {
+export const CheckoutForm: React.FC<CheckoutFormProps> = ({
+  voucherId,
+  quantity,
+  formProp,
+}) => {
   const stripe = useStripe();
   const elements = useElements();
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
-  const buyVoucher = firebaseFunctions.httpsCallable("buyVoucher");
+  const buyVoucher = firebaseFunctions.httpsCallable('buyVoucher');
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async ({ quantity }: { quantity: number }) => {
     // We don't want to let default form submission happen here,
     // which would refresh the page.
-    event.preventDefault();
+    // event.preventDefault();
 
     if (!stripe || !elements) {
       // Stripe.js has not yet loaded.
@@ -53,9 +61,10 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ voucherId, quantity 
       return;
     }
 
-    const cardElement: StripeCardElement | null = elements.getElement(CardElement);
+    const cardElement: StripeCardElement | null =
+      elements.getElement(CardElement);
     if (!cardElement) {
-      throw new Error("stripe card element must be present");
+      throw new Error('stripe card element must be present');
     }
 
     // convert information collected by Elements into actual payment data
@@ -70,11 +79,11 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ voucherId, quantity 
 
     if (result.error) {
       // Show error in payment form
-      const errMsg = result.error.message ?? "something went wrong."
+      const errMsg = result.error.message ?? 'something went wrong.';
       console.error(result.error);
       setMessage(errMsg);
     } else {
-      setMessage("");
+      setMessage('');
 
       // Otherwise send paymentMethod.id to your server
       console.log(voucherId);
@@ -82,36 +91,36 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ voucherId, quantity 
         voucherId: voucherId,
         quantity: quantity,
         paymentMethodId: result.paymentMethod.id,
-        paymentIntentId: undefined
+        paymentIntentId: undefined,
       };
       buyVoucher(req)
         .then((res) => {
           console.log(res);
           handleServerResponse(res.data);
-      })
+        })
         .catch((err: ErrorResponse) => {
           console.error(err);
           setMessage(err.message);
-        })
+        });
     }
   };
 
   const handleServerResponse = (res: SuccessResponse) => {
     if (res.success && res.requiresAction && res.paymentIntentClientSecret) {
       setIsDisabled(true);
-      setMessage("loading...");
-      stripe?.handleCardAction(
-        res.paymentIntentClientSecret
-      ).then(handleStripeJsResult);
+      setMessage('loading...');
+      stripe
+        ?.handleCardAction(res.paymentIntentClientSecret)
+        .then(handleStripeJsResult);
     } else {
-      setMessage("payment success!");
+      setMessage('payment success!');
       // TODO perform redirection or anything
     }
-  }
+  };
 
   const handleStripeJsResult = (result: PaymentIntentResult) => {
     if (result.error) {
-      setMessage("something went wrong.");
+      setMessage('something went wrong.');
       setIsDisabled(false);
     } else {
       // the card action has been fulfilled
@@ -119,7 +128,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ voucherId, quantity 
       buyVoucher({
         voucherId: voucherId,
         quantity: quantity,
-        paymentIntentId: result.paymentIntent.id
+        paymentIntentId: result.paymentIntent.id,
       })
         .then((res) => {
           console.log(res);
@@ -130,17 +139,38 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ voucherId, quantity 
           setMessage(err.message);
         });
     }
-  }
+  };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" value={voucherId} disabled id="voucherID" name="voucherID" />
-      <input type="text" value={quantity} disabled id="quantity" name="quantity" />
-      <div>
+    <Form form={formProp} onFinish={handleSubmit}>
+      <Input
+        type="text"
+        value={voucherId}
+        disabled
+        id="voucherID"
+        name="voucherID"
+      />
+      <div style={{ marginTop: '0.5rem' }}>
+        <Form.Item
+          initialValue={quantity}
+          name="quantity"
+          label="Quantity"
+          rules={[{ required: true }]}
+        >
+          <Input type="text" value={quantity} id="quantity" />
+        </Form.Item>
+      </div>
+      <div style={{ marginTop: '0.5rem' }}>
         <CardSection />
       </div>
-      <button type="submit" disabled={!stripe || isDisabled}>Submit Payment</button>
+      {/* <Button
+        style={{ marginTop: '0.5rem' }}
+        htmlType="submit"
+        disabled={!stripe || isDisabled}
+      >
+        Submit Payment
+      </Button> */}
       <div>{message}</div>
-    </form>
+    </Form>
   );
-}
+};
