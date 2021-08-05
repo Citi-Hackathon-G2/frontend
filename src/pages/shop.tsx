@@ -6,9 +6,10 @@ import {
   TagOutlined,
   WalletOutlined,
 } from '@ant-design/icons';
-import { Button, Card, Divider, Form, Space } from 'antd';
+import { Button, Card, Divider, Form, Modal, Space, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { RouteComponentProps, useHistory, useParams } from 'react-router';
+import { CheckoutForm } from '../components/stripe/CheckoutForm';
 import { VoucherCard } from '../components/voucher';
 import { db } from '../config/firebase.config';
 import { Shop, Voucher } from '../utils';
@@ -19,14 +20,25 @@ interface RouteParams {
 export const ShopPage: React.FC<{}> = () => {
   let history = useHistory();
   const { id } = useParams<RouteParams>();
+  const [loading, setLoading] = useState<boolean>(false);
   const [currentShop, setCurrentShop] = useState<Shop | null>(null);
   const [vouchers, setVouchers] = useState<Voucher[]>([]);
-
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [currentVoucher, setCurrentVoucher] = useState<Voucher | null>(null);
+  const [buyVoucherForm] = Form.useForm();
   const handleBuyVoucher = async (
     e: React.MouseEvent<HTMLElement, MouseEvent>,
     voucher: Voucher
   ) => {
     //TODO: buy voucher
+  };
+
+  const handleSetModalVisible = async (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    voucher: Voucher
+  ) => {
+    setCurrentVoucher(voucher);
+    setModalVisible(true);
   };
 
   useEffect(() => {
@@ -157,13 +169,45 @@ export const ShopPage: React.FC<{}> = () => {
           <div className={styles.button} style={{ marginTop: '0.5rem' }}>
             <Button
               type="primary"
-              onClick={(e) => handleBuyVoucher(e, voucher)}
+              onClick={(e) => handleSetModalVisible(e, voucher)}
             >
               Buy Voucher
             </Button>
           </div>
         </div>
       ))}
+      <Modal
+        title={`Transfer Voucher: ${currentVoucher?.title}`}
+        visible={isModalVisible}
+        // okButtonProps={{}}
+        onOk={buyVoucherForm.submit}
+        onCancel={() => setModalVisible(false)}
+        confirmLoading={loading}
+      >
+        <Spin spinning={loading}>
+          <Form
+            form={buyVoucherForm}
+            onFinish={async (data) => {
+              setModalVisible(false);
+              setLoading(true);
+              // await transferVoucher(data.username, currentVoucher?.id ?? '');
+
+              // setIsCreateVoucherLoading(true);
+              // await createVoucher({ ...data, shopId: selectedShop?.id });
+              // setIsCreateVoucherLoading(false);
+              // setIsCreateVoucherModalVisible(false);
+              setLoading(false);
+              setModalVisible(false);
+            }}
+          >
+            <CheckoutForm
+              formProp={buyVoucherForm}
+              voucherId={currentVoucher?.id ?? ''}
+              quantity={1}
+            />
+          </Form>
+        </Spin>
+      </Modal>
     </div>
   );
 };
