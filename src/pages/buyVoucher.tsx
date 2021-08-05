@@ -111,73 +111,65 @@ export const buyVoucher: React.FC<{}> = () => {
           >
             {'Save S$2.00'}
           </Col>
+          {liked ? (
+            <HeartFilled
+              style={{
+                color: '#b15983',
+                fontSize: '50px',
+                alignItems: 'center',
+                justifyContent: 'center',
+                display: 'inline-flex',
+                marginLeft: 'auto',
+                paddingRight: '5vw',
+              }}
+              onClick={changecolourbutton}
+            />
+          ) : (
+            <HeartOutlined
+              style={{
+                color: '#b15983',
+                fontSize: '50px',
+                alignItems: 'center',
+                justifyContent: 'center',
+                display: 'inline-flex',
+                marginLeft: 'auto',
+                paddingRight: '5vw',
+              }}
+              onClick={changecolourbutton}
+            />
+          )}
         </Row>
 
         <Row style={{ marginTop: '5%' }} className="black-header-style">
-          <Statistic title="Amount Left" value={1237673} loading />
+          <Statistic title="Amount Left" value={1237} loading />
         </Row>
         <div style={{ marginTop: '3%' }} className="text-style">
           Terms and Conditions:{' '}
         </div>
         <div
           className="text-style"
-          style={{ wordBreak: 'break-all', marginRight: '5%' }}
+          style={{ wordBreak: 'break-all', marginRight: '5%', marginBottom: '2vh' }}
         >
           {currentVoucher.description}
         </div>
 
-        <div>
-          <Space
-            direction="horizontal"
-            style={{
-              marginBottom: '15%',
-              marginLeft: '4%',
-              marginTop: '5%',
-            }}
-          >
-            {liked ? (
-              <HeartFilled
-                style={{
-                  color: '#b15983',
-                  fontSize: '50px',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  display: 'inline-flex',
-                  width: 350,
-                }}
-                onClick={changecolourbutton}
-              />
-            ) : (
-              <HeartOutlined
-                style={{
-                  color: '#b15983',
-                  fontSize: '50px',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  display: 'inline-flex',
-                  width: 350,
-                }}
-                onClick={changecolourbutton}
-              />
-            )}
-
-            <Button
-              size="large"
-              className="white-header-style"
-              style={{
-                backgroundColor: '#b15983',
-                alignItems: 'center',
-                justifyContent: 'center',
-                display: 'inline-flex',
-                width: '100%',
-                padding: '10px 10px 10px 10px',
-              }}
-              onClick={(e) => handleSetModalVisible(e, currentVoucher)}
-            >
-              Buy Now
-            </Button>
-          </Space>
-        </div>
+        <Button
+          size="large"
+          className="white-header-style"
+          style={{
+            backgroundColor: '#b15983',
+            alignItems: 'center',
+            justifyContent: 'center',
+            display: 'inline-flex',
+            width: '90vw',
+            padding: '10px 10px 10px 10px',
+            color: 'white',
+            marginLeft: '4%',
+          }}
+          onClick={(e) => handleSetModalVisible(e, currentVoucher)}
+        >
+          Buy Now
+        </Button>
 
         <div>
           <Space
