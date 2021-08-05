@@ -8,12 +8,14 @@ import { db, firebaseFunctions } from '../config/firebase.config';
 import { PATHS } from '../config/routes';
 import { Voucher } from '../utils';
 import styles from './me.module.css';
+import QRCode from "react-qr-code";
 
 export const Me: React.FC<{}> = () => {
   let history = useHistory();
   const { logout, user } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [isQRModalVisible, setQRModalVisible] = useState<boolean>(false);
   const [currentVoucher, setCurrentVoucher] = useState<Voucher | null>(null);
   const [transferVoucherForm] = Form.useForm();
   const handleLogout = async () => {
@@ -35,6 +37,14 @@ export const Me: React.FC<{}> = () => {
   ) => {
     setCurrentVoucher(voucher);
     setModalVisible(true);
+  };
+
+  const handleSetQRModalVisible = async (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    voucher: Voucher
+  ) => {
+    setCurrentVoucher(voucher);
+    setQRModalVisible(true);
   };
 
   const transferVoucher = async (username: string, voucherId: string) => {
@@ -136,26 +146,32 @@ export const Me: React.FC<{}> = () => {
         {user == null
           ? null
           : user.vouchers.map((voucher) => (
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <VoucherCard
-                  style={{
-                    marginTop: '0.5rem',
-                    marginLeft: '0.5rem',
-                    marginRight: '0.5rem',
-                  }}
-                  key={voucher.id}
-                  {...voucher}
-                />
-                <div className={styles.button} style={{ marginTop: '0.5rem' }}>
-                  <Button
-                    type="dashed"
-                    onClick={(e) => handleSetModalVisible(e, voucher)}
-                  >
-                    Transfer Voucher
-                  </Button>
-                </div>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <VoucherCard
+                style={{
+                  marginTop: '0.5rem',
+                  marginLeft: '0.5rem',
+                  marginRight: '0.5rem',
+                }}
+                key={voucher.id}
+                {...voucher}
+              />
+              <div className={styles.button} style={{ marginTop: '0.5rem' }}>
+                <Button
+                  type="dashed"
+                  onClick={(e) => handleSetModalVisible(e, voucher)}
+                >
+                  Transfer Voucher
+                </Button>
+                <Button
+                  type="dashed"
+                  onClick={(e) => handleSetQRModalVisible(e, voucher)}
+                >
+                  Redeem
+                </Button>
               </div>
-            ))}
+            </div>
+          ))}
         <Modal
           title={`Transfer Voucher: ${currentVoucher?.title}`}
           visible={isModalVisible}
@@ -189,17 +205,27 @@ export const Me: React.FC<{}> = () => {
             </Form>
           </Spin>
         </Modal>
-
+        <Modal
+          title={`Redeem Voucher: ${currentVoucher?.title}`}
+          visible={isQRModalVisible}
+          onOk={() => setQRModalVisible(false)}
+          onCancel={() => setQRModalVisible(false)}
+          confirmLoading={loading}
+        >
+          <div className={styles.center}>
+            <QRCode value={currentVoucher?.id ?? ''} />
+          </div>
+        </Modal>
         <div style={{ marginTop: '0.5rem' }}></div>
-        {/* <div className={styles.button}>
+      {/* <div className={styles.button}>
           <Button type="primary" onClick={handleBuy}>
             buy
           </Button>
         </div> */}
         <div className={styles.button}>
-          <Button type="primary" onClick={handleLogout}>
-            Logout
-          </Button>
+        <Button type ="primary" onClick={handleLogout}>
+        Logout
+        </Button>
         </div>
       </div>
     </>
