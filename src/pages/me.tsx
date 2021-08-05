@@ -197,7 +197,7 @@ export const Me: React.FC<{}> = () => {
             >
               <Form.Item
                 name="username"
-                label="Username(email)"
+                label="Username"
                 rules={[{ required: true }]}
               >
                 <Input placeholder='eg. "johnDoe@gmail.com"' />
