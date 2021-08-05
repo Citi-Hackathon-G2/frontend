@@ -1,5 +1,5 @@
 .container {
-  height: 100vh;
+  height: 91vh;
   width: 100vw;
   overflow-y: scroll;
   display: flex;
@@ -21,4 +21,9 @@
 .button {
   margin-left: auto;
   margin-right: auto;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
 }
