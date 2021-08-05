@@ -217,12 +217,12 @@ export const Me: React.FC<{}> = () => {
             buy
           </Button>
         </div> */}
-        <div className={styles.button}>
+        <div className={styles.button} style={{ marginTop: '0.5rem' }}>
           <Button type="primary" onClick={handleLogout}>
             Logout
           </Button>
         </div>
-        <div className={styles.button}>
+        <div className={styles.button} style={{ marginTop: '0.5rem' }}>
           <Button type="primary" onClick={handleSwitchToCashier}>
             Switch To Cashier
           </Button>
