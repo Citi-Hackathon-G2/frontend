@@ -109,7 +109,6 @@ export const ShopPage: React.FC<{}> = () => {
         <Card
           className={styles.card}
           style={{
-            backgroundColor: '#edf67d',
             minHeight: '20vh',
             marginLeft: '1rem',
             marginRight: '1rem',

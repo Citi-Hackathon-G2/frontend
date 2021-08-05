@@ -84,7 +84,6 @@ export const Wallet: React.FC<{}> = () => {
             style={{
               marginTop: 16,
               borderRadius: '10px',
-              backgroundColor: '#b15983',
               border: '0px',
             }}
             type="primary"

@@ -36,11 +36,4 @@
 
 .shopCardBtn {
   border-radius: 10px;
-  border-color: #b15983;
-}
-
-.shopCardBtn:active {
-  background-color: #b15983;
-  color: white;
-  border-color: #b15983;
 }

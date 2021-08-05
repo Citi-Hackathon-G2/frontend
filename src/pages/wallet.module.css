@@ -15,13 +15,13 @@
   border-radius: 10px; /* 5px rounded corners */
   min-width: 90vw;
   max-width: 90vw;
-  background-color: #edf67d;
+
 }
 
 .cornerCounter {
   margin-left: auto;
   margin-top: 0%;
-  background-color: #b15983;
+  background-color: #1890ff;
   padding: 0px 10px 0px 10px;
   border-radius: 10px;
 }

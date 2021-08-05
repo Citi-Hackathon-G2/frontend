@@ -138,7 +138,6 @@ export const Home: React.FC<{}> = () => {
           left: '5%',
           marginTop: '5%',
           marginBottom: '15%',
-          backgroundColor: '#b15983',
         }}
       >
         <Input
