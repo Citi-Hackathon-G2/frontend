@@ -1,3 +1,9 @@
+# QrFREE Entry for Citi Hackathon
+
+- [Backend Repo link](https://github.com/Citi-Hackathon-G2/pigu)
+- [Google Slides](https://docs.google.com/presentation/d/1WrEP71Ja1_qtutZpm7600LbQD78fXFfB8fa7lKkeciY/edit?usp=sharing)
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
