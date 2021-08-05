@@ -4,11 +4,14 @@ import { Card, Tag, Badge } from 'antd';
 import { Voucher } from '../../utils';
 
 import styles from './index.module.css';
+import { RightCircleOutlined } from '@ant-design/icons';
+import { useHistory } from 'react-router';
 
 const { Meta } = Card;
 
 type VoucherCardProps = Voucher & {
   style?: CSSProperties | undefined;
+  displayView?: boolean | undefined;
 };
 
 export const VoucherCard: FC<VoucherCardProps> = ({
@@ -19,11 +22,36 @@ export const VoucherCard: FC<VoucherCardProps> = ({
   style,
   user,
   redeemedAt,
+  displayView,
+  id,
 }) => {
+  let history = useHistory();
   const isAvailable = !!user === false;
 
+  const handleViewVoucher = () => {
+    history.push('/voucher/' + id);
+  };
+
   const card = (
-    <Card className={styles.shadow} style={style} size="small">
+    <Card
+      className={styles.shadow}
+      style={style}
+      size="small"
+      actions={[
+        // <SettingOutlined key="setting" />,
+        // <EditOutlined key="edit" />,
+        displayView ? (
+          <RightCircleOutlined
+            size={48}
+            key="rightCircle"
+            onClick={handleViewVoucher}
+          >
+            {' '}
+            View Voucher
+          </RightCircleOutlined>
+        ) : null,
+      ]}
+    >
       <Meta
         style={{ marginBottom: '1rem' }}
         title={title}

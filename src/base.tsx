@@ -53,8 +53,8 @@ export const Base: React.FC<{}> = () => {
         isAuthenticated={isAuthenticated}
         path={PATHS.SHOP}
         component={ShopPage}
-       
       ></GuardedRoute>
+      
       <GuardedRoute
         isAuthenticated={isAuthenticated}
         path={PATHS.BUY}

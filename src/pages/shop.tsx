@@ -165,19 +165,20 @@ export const ShopPage: React.FC<{}> = () => {
             }}
             key={voucher.id}
             {...voucher}
+            displayView={true}
           />
-          <div className={styles.button} style={{ marginTop: '0.5rem' }}>
+          {/* <div className={styles.button} style={{ marginTop: '0.5rem' }}>
             <Button
               type="primary"
               onClick={(e) => handleSetModalVisible(e, voucher)}
             >
               Buy Voucher
             </Button>
-          </div>
+          </div> */}
         </div>
       ))}
-      <Modal
-        title={`Transfer Voucher: ${currentVoucher?.title}`}
+      {/* <Modal
+        title={`Buy Voucher: ${currentVoucher?.title}`}
         visible={isModalVisible}
         // okButtonProps={{}}
         onOk={buyVoucherForm.submit}
@@ -207,7 +208,7 @@ export const ShopPage: React.FC<{}> = () => {
             />
           </Form>
         </Spin>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

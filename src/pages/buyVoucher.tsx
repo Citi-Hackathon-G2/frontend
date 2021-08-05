@@ -4,6 +4,7 @@ import {
   TagOutlined,
   WalletOutlined,
   DollarOutlined,
+  LeftCircleOutlined,
 } from '@ant-design/icons';
 import {
   Card,
@@ -15,121 +16,220 @@ import {
   Space,
   Row,
   Col,
+  Modal,
+  Form,
+  Spin,
 } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 import { useAuth } from '../authentication';
+import { CheckoutForm } from '../components/stripe/CheckoutForm';
 import { VoucherCard } from '../components/voucher';
+import { db } from '../config/firebase.config';
+import { Shop, Voucher } from '../utils';
 import styles from './wallet.module.css';
 //import Like from '../components/like';
-
+interface RouteParams {
+  id: string;
+}
 export const buyVoucher: React.FC<{}> = () => {
+  const { id } = useParams<RouteParams>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [currentVoucher, setCurrentVoucher] = useState<Voucher | undefined>(
+    undefined
+  );
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [buyVoucherForm] = Form.useForm();
+  const handleBuyVoucher = async (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    voucher: Voucher
+  ) => {
+    //TODO: buy voucher
+  };
   const [liked, setLiked] = useState<boolean>(false);
   const changecolourbutton = () => {
     setLiked(!liked);
     //console.log(liked);
   };
-
-    const buy = () => {
-      //call buy api thingy i saw in the wallet??
-    console.log('buy');
+  const handleSetModalVisible = async (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    voucher: Voucher
+  ) => {
+    setCurrentVoucher(voucher);
+    setModalVisible(true);
+  };
+  const handleBack = () => {
+    history.back();
   };
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const voucherRef = db.collection('voucher').doc(id);
+        // console.log(id);
+        const voucherId = (await voucherRef.get()).id;
+
+        const voucher = (await voucherRef.get()).data() as Voucher | undefined;
+
+        // console.log(voucher);
+        if (voucher) {
+          setCurrentVoucher({ ...voucher, id: voucherId });
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      setLoading(false);
+    })();
+  }, [id]);
+
+  if (!currentVoucher) {
+    return <>Cannot find voucher</>;
+  }
+  console.log(currentVoucher);
   return (
     <div style={{ height: '100vh', overflowY: 'scroll' }}>
-      <Image
-        height={200}
-        src="https://stories.starbucks.com/uploads/2019/04/SBX20190424-Featured-Image-Earnings-Q2-3-1-1024x576.jpg"
-      />
-      <div className="black-header-style">{'Starbucks'}</div>
-      <div className="black-header-style">
-        {'#02-15, Jewel Mall'}
-      </div>
-      <Divider
-        style={{
-          fontSize: 180,
-          backgroundColor: 'black',
-        }}
-      />
-      <Row>
-        <Col className="black-header-style">{'S$18.00'}</Col>
-        <Col
-          className="black-header-style"
-          style={{ left: '50%', color: 'orange' }}
-        >
-          {'Save S$2.00'}
-        </Col>
-      </Row>
-
-      <Row style={{ marginTop: '5%' }} className="black-header-style">
-        <Statistic title="Amount Left" value={1237673} loading />
-      </Row>
-      <div style={{ marginTop: '3%' }} className="text-style">
-        Terms and Conditions:{' '}
-      </div>
-      <div className="text-style">
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since the 1500s, when an unknown printer took a galley of type and
-        scrambled it to make a type specimen book. It has survived not only five
-        centuries, but also the leap into electronic typesetting, remaining
-        essentially unchanged. It was popularised in the 1960s with the release
-        of Letraset sheets containing Lorem Ipsum passages, and more recently
-        with desktop publishing software like Aldus PageMaker including versions
-        of Lorem Ipsum.{' '}
-      </div>
-
-      <div>
-        <Space
-          direction="horizontal"
+      <Spin spinning={loading}>
+        <Image
+          style={{ width: '100vw' }}
+          src="https://stories.starbucks.com/uploads/2019/04/SBX20190424-Featured-Image-Earnings-Q2-3-1-1024x576.jpg"
+        />
+        <div className="black-header-style">{currentVoucher.title}</div>
+        {/* <div className="black-header-style">{currentVoucher}</div> */}
+        <Divider
           style={{
-            marginBottom: '15%',
-            marginLeft: '5%',
-            marginTop: '5%',
+            fontSize: 180,
+            backgroundColor: 'black',
           }}
-        >
-          {liked ? (
-            <HeartFilled
-              style={{
-                color: '#b15983',
-                fontSize: '50px',
-                alignItems: 'center',
-                justifyContent: 'center',
-                display: 'inline-flex',
-                width: 350,
-              }}
-              onClick={changecolourbutton}
-            />
-          ) : (
-            <HeartOutlined
-              style={{
-                color: '#b15983',
-                fontSize: '50px',
-                alignItems: 'center',
-                justifyContent: 'center',
-                display: 'inline-flex',
-                width: 350,
-              }}
-              onClick={changecolourbutton}
-            />
-          )}
-
-          <Button
-            size="large"
-            className="white-header-style"
-            style={{
-              backgroundColor: '#b15983',
-              alignItems: 'center',
-              justifyContent: 'center',
-              display: 'inline-flex',
-              width: 350,
-              padding: '10px 10px 10px 10px',
-            }}
-            onClick={buy}
+        />
+        <Row>
+          <Col className="black-header-style">
+            {'S$' + `${currentVoucher.price}`}
+          </Col>
+          <Col
+            className="black-header-style"
+            style={{ left: '10', color: 'orange' }}
           >
-            Buy Now
-          </Button>
-        </Space>
-      </div>
+            {'Save S$2.00'}
+          </Col>
+        </Row>
+
+        <Row style={{ marginTop: '5%' }} className="black-header-style">
+          <Statistic title="Amount Left" value={1237673} loading />
+        </Row>
+        <div style={{ marginTop: '3%' }} className="text-style">
+          Terms and Conditions:{' '}
+        </div>
+        <div
+          className="text-style"
+          style={{ wordBreak: 'break-all', marginRight: '5%' }}
+        >
+          {currentVoucher.description}
+        </div>
+
+        <div>
+          <Space
+            direction="horizontal"
+            style={{
+              marginBottom: '15%',
+              marginLeft: '4%',
+              marginTop: '5%',
+            }}
+          >
+            {liked ? (
+              <HeartFilled
+                style={{
+                  color: '#b15983',
+                  fontSize: '50px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  display: 'inline-flex',
+                  width: 350,
+                }}
+                onClick={changecolourbutton}
+              />
+            ) : (
+              <HeartOutlined
+                style={{
+                  color: '#b15983',
+                  fontSize: '50px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  display: 'inline-flex',
+                  width: 350,
+                }}
+                onClick={changecolourbutton}
+              />
+            )}
+
+            <Button
+              size="large"
+              className="white-header-style"
+              style={{
+                backgroundColor: '#b15983',
+                alignItems: 'center',
+                justifyContent: 'center',
+                display: 'inline-flex',
+                width: '100%',
+                padding: '10px 10px 10px 10px',
+              }}
+              onClick={(e) => handleSetModalVisible(e, currentVoucher)}
+            >
+              Buy Now
+            </Button>
+          </Space>
+        </div>
+
+        <div>
+          <Space
+            direction="horizontal"
+            style={{
+              marginBottom: '15%',
+              marginLeft: '4%',
+              marginTop: '5%',
+            }}
+          >
+            <Button
+              type="primary"
+              icon={<LeftCircleOutlined />}
+              size={'large'}
+              onClick={handleBack}
+            />
+          </Space>
+        </div>
+
+        <Modal
+          title={`Transfer Voucher: ${currentVoucher?.title}`}
+          visible={isModalVisible}
+          // okButtonProps={{}}
+          onOk={buyVoucherForm.submit}
+          onCancel={() => setModalVisible(false)}
+          confirmLoading={loading}
+        >
+          <Spin spinning={loading}>
+            <Form
+              form={buyVoucherForm}
+              onFinish={async (data) => {
+                setModalVisible(false);
+                setLoading(true);
+                // await transferVoucher(data.username, currentVoucher?.id ?? '');
+
+                // setIsCreateVoucherLoading(true);
+                // await createVoucher({ ...data, shopId: selectedShop?.id });
+                // setIsCreateVoucherLoading(false);
+                // setIsCreateVoucherModalVisible(false);
+                setLoading(false);
+                setModalVisible(false);
+              }}
+            >
+              <CheckoutForm
+                formProp={buyVoucherForm}
+                voucherId={currentVoucher?.id ?? ''}
+                quantity={1}
+              />
+            </Form>
+          </Spin>
+        </Modal>
+      </Spin>
     </div>
   );
 };
