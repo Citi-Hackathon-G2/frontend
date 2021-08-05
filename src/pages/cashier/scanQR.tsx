@@ -13,9 +13,15 @@ import { Link } from 'react-router-dom';
 import styles from './login.module.css';
 import QrReader from 'react-qr-reader';
 
+import { redeemVoucher } from './utils/api';
 import firebase from 'firebase';
-
+import { firebaseFunctions } from '../../config/firebase.config';
+import { db } from '../../config/firebase.config';
 require('firebase/functions');
+//import * as cors from 'cors';
+//const corsHandler = cors({ origin: true });
+//vouchers.push({...data, id: doc.id, redeemedAt: data.redeemedAt?.toDate()}})
+
 
 export const scanQR = () => {
   let history = useHistory();
@@ -24,13 +30,14 @@ export const scanQR = () => {
   //wait for scan
   const handleScan = (data: any) => {
     if (data) {
-      console.log(data);
+      //console.log(data);
       setResult(data.toString()); ///getStringValue() or toString()
+      const voucherId: string = data.toString();
+      console.log(voucherId);
+      redeemVoucher({ voucherId: 'v6iPptpMivjuxlhnR4w5' });
     }
 
-    if (result != undefined) {
-      callFirebaseRedeemFunction();
-    }
+    
   };
 
   const handleError = (err: TypeError) => {
@@ -45,10 +52,10 @@ export const scanQR = () => {
   //const [loading, setLoading] = useState<boolean>(false);
 
   //using webV8
-  const callFirebaseRedeemFunction = () => {
+  /* callFirebaseRedeemFunction = () => {
     if (result !== undefined) {
       console.log(result);
-      /*var redeemVoucher = firebase.functions().httpsCallable("return something");
+      var redeemVoucher = firebase.functions().httpsCallable("redeem voucher");
         //setLoading(true);
         redeemVoucher({ voucherId: result })
             .then((res: any) => {
@@ -59,9 +66,12 @@ export const scanQR = () => {
                 console.log(message);
                 notification.error({message});
                 //setLoading(false);
-            }); */
+            }); 
     }
-  };
+  };*/
+
+    
+  
 
   return (
     <div>
@@ -71,6 +81,7 @@ export const scanQR = () => {
         onScan={handleScan}
         style={{ width: '100%' }}
       />
+     
       <div className="horizontal-container">
         <Button
           style={{

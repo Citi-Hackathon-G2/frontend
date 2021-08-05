@@ -16,12 +16,18 @@ import {
   WalletOutlined,
   SearchOutlined,
   ShoppingOutlined,
+  SketchOutlined,
+  ToolOutlined,
+  SkinOutlined,
+  HddOutlined,
+  ApiOutlined
 } from '@ant-design/icons';
 import { useHistory } from 'react-router';
 import { PATHS } from '../config/routes';
 import { useAuth } from '../authentication';
 import { Shop } from '../utils';
 import { db } from '../config/firebase.config';
+
 
 export const Home: React.FC<{}> = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -78,6 +84,10 @@ export const Home: React.FC<{}> = () => {
     })();
   }, []);
 
+  const navtoresults = () => {
+    history.push(PATHS.RESULTS);
+  }
+
   return (
     <div style={{ height: '100vh', overflowY: 'scroll' }}>
       <div className="header-style">Hi {user?.username ?? 'user'},</div>
@@ -95,7 +105,12 @@ export const Home: React.FC<{}> = () => {
                 display: 'inline-flex',
               }}
             >
-              <Form.Item className="header-style" name="myvouchers">
+              <Form.Item className="header-style" name="myvouchers" style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                display: 'inline-flex',
+                width:350,
+              }}>
                 my vouchers
               </Form.Item>
               <Form.Item name="amount">
@@ -171,6 +186,7 @@ export const Home: React.FC<{}> = () => {
             }}
             gutter={16}
           >
+
             <Col span={8}>
               <Card title="Retail" bordered={false}>
                 <ShoppingOutlined
@@ -182,13 +198,27 @@ export const Home: React.FC<{}> = () => {
               </Card>
             </Col>
             <Col span={8}>
-              <Card title="Food" bordered={false}>
-                Card content
+              
+              <Card onClick={() => navtoresults() }title="Food" bordered={false}>
+                
+              <ApiOutlined
+                  style={{
+                    fontSize: '50px',
+                  }}
+                  className="site-form-item-icon"
+                />
               </Card>
+              
             </Col>
             <Col span={8}>
-              <Card title="Card title" bordered={false}>
-                Card content
+              <Card title="Jewelry" bordered={false}>
+              <SketchOutlined
+                  style={{
+                    fontSize: '50px',
+                  }}
+                  className="site-form-item-icon"
+                />
+              
               </Card>
             </Col>
           </Row>
@@ -199,18 +229,33 @@ export const Home: React.FC<{}> = () => {
             gutter={16}
           >
             <Col span={8}>
-              <Card title="Card title" bordered={false}>
-                Card content
+              <Card title="Electronics" bordered={false}>
+              <ToolOutlined
+                  style={{
+                    fontSize: '50px',
+                  }}
+                  className="site-form-item-icon"
+                />
               </Card>
             </Col>
             <Col span={8}>
-              <Card title="Card title" bordered={false}>
-                Card content
+              <Card title="Clothes" bordered={false}>
+              <SkinOutlined
+                  style={{
+                    fontSize: '50px',
+                  }}
+                  className="site-form-item-icon"
+                />
               </Card>
             </Col>
             <Col span={8}>
-              <Card title="Card title" bordered={false}>
-                Card content
+              <Card title="Furniture" bordered={false}>
+              <HddOutlined
+                  style={{
+                    fontSize: '50px',
+                  }}
+                  className="site-form-item-icon"
+                />
               </Card>
             </Col>
           </Row>
