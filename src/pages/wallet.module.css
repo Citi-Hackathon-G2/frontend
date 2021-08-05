@@ -15,7 +15,6 @@
   border-radius: 10px; /* 5px rounded corners */
   min-width: 90vw;
   max-width: 90vw;
-
 }
 
 .cornerCounter {
@@ -32,6 +31,7 @@
   flex-direction: row;
   overflow: auto;
   white-space: nowrap;
+  min-height: 200px;
 }
 
 .innerCard {

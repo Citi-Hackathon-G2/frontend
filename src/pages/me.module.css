@@ -14,12 +14,12 @@
   border-radius: 10px; /* 5px rounded corners */
   min-width: 90vw;
   max-width: 90vw;
-  left: 5%;
 }
 
 .button {
   margin-left: auto;
   margin-right: auto;
+  border-radius: 10px;
 }
 
 .center {

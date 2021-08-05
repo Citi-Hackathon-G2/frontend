@@ -87,7 +87,7 @@ export const Me: React.FC<{}> = () => {
   };
   return (
     <>
-      <div className={styles.container}>
+      <div className={styles.container} style={{ display: 'flex', alignItems: 'center' }}>
         <div style={{ marginTop: '0.5rem' }}></div>
         <Card className={styles.yellowCard}>
           <div
@@ -151,12 +151,17 @@ export const Me: React.FC<{}> = () => {
         {user == null
           ? null
           : user.vouchers.map((voucher) => (
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <div style={{ marginTop: '1vh' }}></div>
                 <VoucherCard
                   style={{
                     marginTop: '0.5rem',
                     marginLeft: '0.5rem',
                     marginRight: '0.5rem',
+                    borderRadius: '10px',
+                    width: '88vw',
+                    padding: '5%',
+                    boxShadow: '0 10px 24px rgba(0, 0, 0, 0.05), 0 7px 7px rgba(0, 0, 0, 0.12)',
                   }}
                   key={voucher.id}
                   {...voucher}
@@ -218,12 +223,12 @@ export const Me: React.FC<{}> = () => {
           </Button>
         </div> */}
         <div className={styles.button} style={{ marginTop: '0.5rem' }}>
-          <Button type="primary" onClick={handleLogout}>
+          <Button type="primary" className={styles.button} onClick={handleLogout}>
             Logout
           </Button>
         </div>
         <div className={styles.button} style={{ marginTop: '0.5rem' }}>
-          <Button type="primary" onClick={handleSwitchToCashier}>
+          <Button type="primary" className={styles.button} onClick={handleSwitchToCashier}>
             Switch To Cashier
           </Button>
         </div>

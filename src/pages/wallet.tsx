@@ -48,6 +48,7 @@ export const Wallet: React.FC<{}> = () => {
                       marginTop: '0.5rem',
                       marginLeft: '0.5rem',
                       marginRight: '0.5rem',
+                      borderRadius: '10px',
                     }}
                     key={voucher.id}
                     {...voucher}
