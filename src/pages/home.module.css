@@ -28,5 +28,19 @@
   border-radius: 10px; /* 5px rounded corners */
   min-width: 90vw;
   max-width: 90vw;
-  
+}
+
+.shopCard {
+  border-radius: 10px;
+}
+
+.shopCardBtn {
+  border-radius: 10px;
+  border-color: #b15983;
+}
+
+.shopCardBtn:active {
+  background-color: #b15983;
+  color: white;
+  border-color: #b15983;
 }

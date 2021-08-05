@@ -45,7 +45,6 @@ export const Home: React.FC<{}> = () => {
   };
 
   let history = useHistory();
- 
 
   const handleEnterShop = async (
     e: React.MouseEvent<HTMLElement, MouseEvent>,
@@ -158,10 +157,10 @@ export const Home: React.FC<{}> = () => {
             // console.log(shop);
             return (
               <List.Item>
-                <Card title={shop.name}>
-                  <Button onClick={(e) => handleEnterShop(e, shop.id)}>
+                <Card className={styles.shopCard} title={shop.name}>
+                  <Button className={styles.shopCardBtn} onClick={(e) => handleEnterShop(e, shop.id)}>
                     {' '}
-                    ENTER
+                    Enter
                   </Button>
                 </Card>
               </List.Item>
